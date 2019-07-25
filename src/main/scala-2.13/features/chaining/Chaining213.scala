@@ -10,5 +10,10 @@ object Chaining213 extends App {
 
     val y: Int = 5 pipe (_ * x) tap println
 
+    List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
+
+    val times6 = (_: Int) * 6
+    (1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
+
     println("==========\n")
 }
