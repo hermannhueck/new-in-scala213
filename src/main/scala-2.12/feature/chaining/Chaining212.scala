@@ -1,4 +1,4 @@
-package features.chaining
+package feature.chaining
 
 object Chaining212 extends App {
 

@@ -1,4 +1,4 @@
-package features.stringext
+package feature.stringext
 
 import scala.util.chaining._
 

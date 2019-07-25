@@ -1,6 +1,6 @@
-package features.stringext
+package feature.stringext
 
-import features.chaining._
+import feature.chaining._
 
 object StringExt212 extends App {
 

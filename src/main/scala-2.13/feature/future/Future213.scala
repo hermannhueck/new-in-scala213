@@ -1,4 +1,4 @@
-package features.future
+package feature.future
 
 import scala.concurrent._
 import scala.concurrent.duration._

@@ -1,4 +1,4 @@
-package features.either
+package feature.either
 
 import scala.util.chaining._
 

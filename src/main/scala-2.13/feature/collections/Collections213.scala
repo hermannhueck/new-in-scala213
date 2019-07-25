@@ -1,4 +1,4 @@
-package features.collections
+package feature.collections
 
 object Collections213 extends App {
 

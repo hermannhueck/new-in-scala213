@@ -1,8 +1,8 @@
-package features.future
+package feature.future
 
 import scala.concurrent._
 import scala.concurrent.duration._
-import features.chaining._
+import feature.chaining._
 
 object Future212 extends App {
 

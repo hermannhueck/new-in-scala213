@@ -1,4 +1,4 @@
-package features
+package feature
 
 package object either {
 
