@@ -1,4 +1,4 @@
-package newin213.future
+package features.future
 
 object Future212 extends App {
 
