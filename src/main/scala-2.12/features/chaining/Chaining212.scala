@@ -18,12 +18,6 @@ object Chaining212 extends App {
     println("-----")
 
     {
-        implicit class ChainingOps[A](a: A) {
-            def pipe[B](f: A => B): B = f(a)
-            def |>[B](f: A => B): B = a pipe f
-            def tap[B](f: A => Unit): A = a pipe ( x => { f(x); x } )
-        }
-
         val x: Int = 5 tap println
 
         val y: Int = 5 pipe (_ * x) tap println
