@@ -1,0 +1,11 @@
+
+target/
+
+.idea/
+.bloop/
+.metals/
+.vscode/
+
+.dotty-ide-disabled
+
+.DS_Store
