@@ -10,17 +10,19 @@ object CaseClasses213 extends App {
   case object Male extends Gender
   case object Female extends Gender
 
-  case class Person(name: String, age: Int, gender: Gender, email: String)
+  case class Person(name: String, age: Int, gender: Gender, email: String) {
+    def tupled: (String, Int, Gender, String) = (name, age, gender, email)
+  }
 
   val johndoe = Person("John Doe", 42, Male, "john@doe.com")
 
-  johndoe.productElementNames foreach println
+  johndoe.productElementNames foreach println // since 2.13
 
   println
-  johndoe.productElementName(0) tap (name => print(s"$name: "))
-  johndoe.productElement(0) tap println
-  johndoe.productElementName(1) tap (name => print(s"$name: "))
-  johndoe.productElement(1) tap println
+  johndoe.productElementName(0) tap (name => print(s"$name: "))  // since 2.13
+  johndoe.productElement(0) tap println                          // before 2.13
+  johndoe.productElementName(1) tap (name => print(s"$name: "))  // since 2.13
+  johndoe.productElement(1) tap println                          // before 2.13
 
   println
   def elementNameAndValue(p: Person, index: Int): String =
@@ -31,16 +33,24 @@ object CaseClasses213 extends App {
   }
 
   println
-  def productElementToJson(p: Product, index: Int): String =
-    s"""{ "${p.productElementName(index)}": ${p.productElement(index)} }"""
+  def pairToJson(name: String, value: Any): String =
+    s"""{ "$name": $value }"""
 
-  def productToJson(p: Product): String =
-    (0 until johndoe.productArity)
+  def productElementToJson(p: Product, index: Int): String =
+    pairToJson(p.productElementName(index), p.productElement(index))
+
+  def productToJson(product: Product): String =
+    (0 until product.productArity)
       .toList
-      .map { index => productElementToJson(johndoe, index) }
+      .map { index => productElementToJson(product, index) }
       .mkString("{ ", ", ", " }")
 
-  productToJson(johndoe) tap println
+  implicit class ProductOps(private val product: Product) {
+    def toJsonString: String = productToJson(product)
+  }
+
+  johndoe.toJsonString tap println
+  johndoe.tupled.toJsonString tap println
 
   println("==========\n")
 }
