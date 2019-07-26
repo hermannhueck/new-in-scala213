@@ -6,12 +6,11 @@ val supportedScalaVersions = List(scala212, scala213)
 
 inThisBuild(
   Seq(
-    scalaVersion       := scala213,
+    scalaVersion       := scala212,
     crossScalaVersions := supportedScalaVersions,
     version            := "0.1.0-SNAPSHOT",
   )
 )
-
 
 lazy val root = (project in file("."))
    .settings(
