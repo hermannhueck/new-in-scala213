@@ -1,6 +1,6 @@
-package feature.either
+package feature.stdlib.either
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 object Either212 extends App {
 

@@ -1,4 +1,4 @@
-package feature.collections.mapview
+package feature.collections
 
 import scala.util.chaining._
 
@@ -12,11 +12,11 @@ object MapView213 extends App {
     val kvsFlipped: Map[Int, String] = kvs.toList.map { case (fst, snd) => (snd, fst) }.toMap tap println
 
     ">>> mapValues:" tap println
-    val mapView: MapView[String, Int] = kvs.mapValues(_ + 10) tap println
+    val mapView: MapView[String, Int] = kvs.view.mapValues(_ + 10) tap println
     val mappedValues: Map[String, Int] = mapView.toMap tap println
 
     ">>> filterKeys:" tap println
-    val mapView2: MapView[Int, String] = kvsFlipped.filterKeys(_ %2 != 0) tap println
+    val mapView2: MapView[Int, String] = kvsFlipped.view.filterKeys(_ %2 != 0) tap println
     val keysFiltered: Map[Int, String] = mapView2.toMap tap println
 
     println("==========\n")

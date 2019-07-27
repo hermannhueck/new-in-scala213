@@ -1,4 +1,4 @@
-package feature.collections.breakout
+package feature.collections
 
 import scala.util.chaining._
 

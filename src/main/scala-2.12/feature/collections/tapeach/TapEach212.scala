@@ -1,6 +1,6 @@
 package feature.collections.tapeach
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 import scala.collection.AbstractSeq
 

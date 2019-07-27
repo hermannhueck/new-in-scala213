@@ -1,4 +1,4 @@
-package feature.chaining
+package feature.stdlib;
 
 object Chaining213 extends App {
 

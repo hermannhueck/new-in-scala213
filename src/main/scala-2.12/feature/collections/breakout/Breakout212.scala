@@ -1,6 +1,6 @@
 package feature.collections.breakout
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 object Breakout212 extends App {
 

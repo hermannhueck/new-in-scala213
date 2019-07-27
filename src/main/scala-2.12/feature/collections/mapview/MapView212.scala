@@ -1,6 +1,6 @@
 package feature.collections.mapview
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 object MapView212 extends App {
 

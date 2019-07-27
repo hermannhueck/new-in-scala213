@@ -1,9 +1,9 @@
-package feature.using
-
-import scala.util.chaining._
-import scala.util.{Try, Success, Failure, Using}
+package feature.stdlib;
 
 import java.io.{BufferedReader, FileReader}
+
+import scala.util.{Failure, Success, Try, Using}
+import scala.util.chaining._
 
 object Using213 extends App {
 
@@ -34,7 +34,7 @@ object Using213 extends App {
 
     final case class Resource(name: String) extends AutoCloseable {
         override def close(): Unit = println(s"Closing $name")
-        def lines = List(s"$name: line 1", s"$name: line 2")
+        def lines: List[String] = List(s"$name: line 1", s"$name: line 2")
     }
 
     val List(r1, r2, r3) = List("1st", "2nd", "3rd").map(Resource)

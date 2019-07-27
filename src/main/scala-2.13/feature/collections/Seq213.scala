@@ -1,8 +1,10 @@
-package feature.collections.seq
+package feature.collections
 
 import scala.util.chaining._
+
+import scala.collection.immutable
+import scala.collection.immutable.ArraySeq
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.immutable, immutable.ArraySeq
 
 object Seq213 extends App {
 

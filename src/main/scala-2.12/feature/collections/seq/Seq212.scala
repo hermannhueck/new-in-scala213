@@ -1,6 +1,6 @@
 package feature.collections.seq
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.immutable

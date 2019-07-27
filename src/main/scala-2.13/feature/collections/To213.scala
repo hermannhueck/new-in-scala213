@@ -1,4 +1,4 @@
-package feature.collections.to
+package feature.collections
 
 import scala.util.chaining._
 

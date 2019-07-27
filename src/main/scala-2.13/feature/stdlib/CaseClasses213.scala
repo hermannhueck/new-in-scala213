@@ -1,4 +1,4 @@
-package feature.caseclasses
+package feature.stdlib;
 
 import scala.util.chaining._
 

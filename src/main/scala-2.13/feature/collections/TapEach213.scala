@@ -1,6 +1,4 @@
-package feature.collections.tapeach
-
-import scala.util.chaining._
+package feature.collections
 
 object TapEach213 extends App {
 

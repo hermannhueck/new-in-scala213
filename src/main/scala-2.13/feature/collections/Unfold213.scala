@@ -1,9 +1,8 @@
-package feature.collections.unfold
-
-import scala.util.chaining._
-import scala.util.Using
+package feature.collections
 
 import java.io.{BufferedReader, FileReader}
+
+import scala.util.Using
 
 object Unfold213 extends App {
 

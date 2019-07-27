@@ -1,6 +1,6 @@
 package feature.collections.lazylist
 
-import feature.chaining._
+import feature.stdlib.chaining._
 
 object LazyList212 extends App {
 

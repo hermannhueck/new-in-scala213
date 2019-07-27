@@ -1,10 +1,17 @@
-package feature.stringext
+package feature.stdlib.stringext
 
-import scala.util.chaining._
+import feature.stdlib.chaining._
 
-object StringExt213 extends App {
+object StringExt212 extends App {
 
-    println("\n========== StringExt 2.13")
+    println("\n========== StringExt 2.12")
+
+    implicit class StringOps(private val s: String) {
+        import scala.util.Try
+        def toIntOption: Option[Int] = Try(s.toInt).toOption
+        def toDoubleOption: Option[Double] = Try(s.toDouble).toOption
+        def toBooleanOption: Option[Boolean] = Try(s.toBoolean).toOption
+    }
 
     "----- String#toIntOption" tap println
     val i1 = "42".toInt tap println
