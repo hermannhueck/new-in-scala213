@@ -1,6 +1,6 @@
-package feature.stdlib
+package feature
 
-package object either {
+package object stdlib {
 
   implicit class RightOps[L, R](private val right: Right[L, R]) {
     def withLeft[LL](implicit ev: L <:< LL): Either[LL, R] = right.asInstanceOf[Either[LL, R]]

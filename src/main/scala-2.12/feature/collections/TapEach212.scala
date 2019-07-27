@@ -1,10 +1,4 @@
-package feature.collections.tapeach
-
-import feature.stdlib.chaining._
-
-import scala.collection.AbstractSeq
-
-import scala.language.higherKinds
+package feature.collections
 
 object TapEach212 extends App {
 

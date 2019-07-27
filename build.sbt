@@ -6,7 +6,7 @@ val supportedScalaVersions = List(scala212, scala213)
 
 inThisBuild(
   Seq(
-    scalaVersion       := scala213,
+    scalaVersion       := scala212,
     crossScalaVersions := supportedScalaVersions,
     version            := "0.1.0-SNAPSHOT",
     scalacOptions ++= Seq(
@@ -29,4 +29,4 @@ lazy val root = (project in file("."))
     ),
   )
 
-// addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10") // not yet for 2.13.0
+// addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10") // not yet available for 2.13.0

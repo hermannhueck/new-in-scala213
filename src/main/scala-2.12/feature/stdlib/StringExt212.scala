@@ -1,6 +1,6 @@
-package feature.stdlib.stringext
+package feature.stdlib
 
-import feature.stdlib.chaining._
+import util.chaining._
 
 object StringExt212 extends App {
 

@@ -1,6 +1,6 @@
-package feature.collections.lengthis
+package feature.collections
 
-import feature.stdlib.chaining._
+import util.chaining._
 
 object LengthIs212 extends App {
 

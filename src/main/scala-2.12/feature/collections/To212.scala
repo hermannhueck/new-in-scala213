@@ -1,6 +1,6 @@
-package feature.collections.to
+package feature.collections
 
-import feature.stdlib.chaining._
+import util.chaining._
 
 object To212 extends App {
 

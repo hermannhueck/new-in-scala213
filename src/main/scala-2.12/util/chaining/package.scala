@@ -1,4 +1,4 @@
-package feature.stdlib
+package util
 
 package object chaining {
 
