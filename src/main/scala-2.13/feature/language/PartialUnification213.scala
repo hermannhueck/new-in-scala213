@@ -11,7 +11,7 @@ import scala.language.higherKinds
  */
 object PartialUnification213 extends App {
 
-  println("\n========== Partial Unification 2.12")
+  println("\n========== Partial Unification 2.13")
 
   println("----- Scala 2.13: partial-unification is already enabled ---")
   import feature.stdlib.Using213._
@@ -20,7 +20,11 @@ object PartialUnification213 extends App {
   def foo[F[_], A](fa: F[A]): String =
     fa.toString
 
-  foo { x: Int => x * 2 }
+  val either: Either[String, Int] = Right(42).withLeft[String]
+  foo { either }
+
+  val intToInt: Function1[Int, Int] = x => x * 2
+  foo { intToInt }
 
   println("==========\n")
 }

@@ -1,5 +1,6 @@
 package feature.language
 
+import util.either._
 import scala.language.higherKinds
 
 /*
@@ -18,7 +19,11 @@ object PartialUnification212 extends App {
   def foo[F[_], A](fa: F[A]): String =
     fa.toString
 
-  foo { x: Int => x * 2 }
+  val either: Either[String, Int] = Right(42).withLeft[String]
+  foo { either }
+
+  val intToInt: Function1[Int, Int] = x => x * 2
+  foo { intToInt }
 
   println("==========\n")
 }
