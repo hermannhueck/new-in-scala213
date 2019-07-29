@@ -1,4 +1,4 @@
-package feature.language;
+package feature.stdlib;
 
 import scala.util.chaining._
 
