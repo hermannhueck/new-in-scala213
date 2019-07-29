@@ -6,7 +6,7 @@ val supportedScalaVersions = List(scala212, scala213)
 
 inThisBuild(
   Seq(
-    scalaVersion       := scala212,
+    scalaVersion       := scala213,
     crossScalaVersions := supportedScalaVersions,
     version            := "0.1.0-SNAPSHOT",
     scalacOptions ++= Seq(
@@ -14,8 +14,7 @@ inThisBuild(
       "-deprecation",           // warn about use of deprecated APIs
       "-unchecked",             // warn about unchecked type parameters
       "-feature",               // warn about misused language features
-      //"-Ypartial-unification",  // allow the compiler to unify type constructors of different arities
-      //"-Xlint",                 // enable handy linter warnings
+      "-Xlint",                 // enable handy linter warnings
       //"-Xfatal-warnings",        // turn compiler warnings into errors
       // "-P:semanticdb:sourceroot:." // use only for bloopInstall
     ),
