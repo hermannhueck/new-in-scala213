@@ -10,7 +10,9 @@ object To212 extends App {
 
     val l1 = map.toList tap println
     val l2 = map.to[List] tap println
-    // val l3 = map.to(List) tap println // not available in 2.12
+
+    import scala.collection.compat._
+    val l3 = map.to(List) tap println // not available in 2.12 std lib but in compat lib
 
     println("==========\n")
 }
