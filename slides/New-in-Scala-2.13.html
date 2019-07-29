@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New in Scala 2.13</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="keywords" content="Scala 2.13">
+    <meta name="description" content="New in Scala 2.13">
+
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Droid Serif';
+      }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 4em; }
+      .remark-slide-content h2 { font-size: 2.5em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 4em;
+      }
+      .footnote2 {
+        position: absolute;
+        bottom: 2em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #001804ec;
+        color: #f3f3f3;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+      .left-column h2:last-of-type, .left-column h3:last-child {
+        color: #000;
+      }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
+
+      /* Two-column layout 50/50 */
+      .left-column-50 {
+        width: 49%;
+        float: left;
+      }
+      .right-column-50 {
+        width: 49%;
+        float: right;
+      }
+
+      .tiny-font {
+        font-size: 1em
+      }
+
+      .medium-font {
+        font-size: 1.25em
+      }
+
+      .large-font {
+        font-size: 1.5em
+      }
+
+      .xlarge-font {
+        font-size: 1.75em
+      }
+
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(odd) {
+        background-color: #dddddd;
+      }
+    </style>
+  </head>
+  <body>
+
+<textarea id="source">
+
+name: main-template
+layout: true
+class: left, top, inverse
+<!---
+class: left, top, inverse
+-->
+
+---
+
+class: center
+
+<br/>
+<br/>
+<br/>
+# New in Scala 2.13
+
+<br/>
+<br/>
+<br/>
+<br/>
+### &copy; 2019 Hermann Hueck
+<br/>
+https://github.com/hermannhueck/new-in-scala213
+
+---
+
+# Abstract
+
+<br/>
+This presentation shows the feature updates from Scala 2.12 to 2.13.
+The list of features is not comprehensive, but it is my personal selection of favorites.
+I will focus on those features which IMO impact/ease the programmers live most.
+
+I will look at 5 feature areas: compiler, standard library, language changes,
+Future and finally collections which have been redesinged in 2.13.
+---
+
+# Agenda
+<br/>
+
+1. [Release Summary](#release_summary)
+1. [Compiler](#compiler)
+1. [Standard Library](#standard_library)
+1. [Language Changes](#language_changes)
+1. [Future](#future)
+1. [Collections](#collections)
+1. [Migration](#migration)
+1. [References](#references)
+
+---
+
+class: middle, center
+name: release_summary
+
+# 1. Release Summary
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+## Release Summary
+
+<br/>
+2.13 improves Scala in the following areas:
+
+- **Collections**: Standard library collections have been overhauled for simplicity, performance, and safety.
+  This is the centerpiece of the release.
+
+--
+
+- **Future**: is faster and more robust. 
+
+--
+
+- **Standard library**: Elsewhere, useful classes and methods have been added.
+
+--
+
+- **Language**: Literal types, partial unification, by-name implicits, more.
+
+--
+
+- **Compiler**: 5-10% faster, deterministic output, improved optimizer.
+
+--
+
+.footnote[
+  From the Scala release description:<br/>
+]
+.footnote2[
+  https://github.com/scala/scala/releases/tag/v2.13.0
+]
+
+---
+
+class: middle, center
+name: compiler
+
+# 2. Compiler
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+<br/>
+## Compiler
+
+<br/>
+- ###Performance improved
+
+- ###Some improvments already flew back to 2.12.8. More to come in 2.12.9.
+
+- ###Deterministic, reproducible compilation
+
+- ###Optimizer improvements (collections, arrays, inlining)
+
+---
+
+class: middle, center
+name: standard_library
+
+# 3. Standard Library
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+class: middle, center
+name: language_changes
+
+# 4. Language Changes
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+class: middle, center
+name: future
+
+# 5. Future
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+class: middle, center
+name: collections
+
+# 6. Collections
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+class: middle, center
+name: migration
+
+# 7. Migration
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+class: middle, center
+name: references
+
+# 21. References
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+### References
+
+- Code and Slides of this Talk:<br/>
+  https://github.com/hermannhueck/new-in-scala213
+
+- Official Release Description<br/>
+  https://github.com/scala/scala/releases/tag/v2.13.0
+
+- XXXXXXXXXX<br/>
+  XXXXXXXXXX
+
+- XXXXXXXXXX<br/>
+  XXXXXXXXXX
+
+- XXXXXXXXXX<br/>
+  XXXXXXXXXX
+
+- XXXXXXXXXX<br/>
+  XXXXXXXXXX
+
+- XXXXXXXXXX<br/>
+  XXXXXXXXXX
+
+---
+
+class: middle, center
+
+# Thank You
+<br/>
+<br/>
+<br/>
+
+# Q &amp; A
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+https://github.com/hermannhueck/new-in-scala213
+
+
+</textarea>
+
+    <script src="remark-latest.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        // sourceUrl: 'some-source.md',
+
+        // Set the slideshow display ratio
+        // Default: '4:3'
+        // Alternatives: '16:9', ...
+        ratio: '4:3',
+
+        // Navigation options
+        navigation: {
+          // Enable or disable navigating using scroll
+          // Default: true
+          // Alternatives: false
+          scroll: false,
+
+          // Enable or disable navigation using touch
+          // Default: true
+          // Alternatives: false
+          touch: true,
+
+          // Enable or disable navigation using click
+          // Default: false
+          // Alternatives: true
+          click: false
+        },
+
+        // Enable or disable counting of incremental slides in the slide counting
+        countIncrementalSlides: true
+      });
+    </script>
+  </body>
+</html>
