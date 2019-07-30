@@ -28,27 +28,27 @@ object Using212 extends App {
     go(reader, List.empty).reverse
   }
 
-  def catFile(fileName: String): Unit = {
+  def tryLines(fileName: String): Try[Seq[String]] =
+    Using(bufferedReader(fileName)) { reader => readLines(reader) }
 
-    val `try`: Try[Seq[String]] =
-      Using(bufferedReader(fileName)) { reader => readLines(reader) }
-
-    `try` match {
+  def catFile(fileName: String): Unit =
+    tryLines(fileName) match {
       case Failure(exception) => exception.toString tap println
       case Success(lines) => lines foreach println
     }
-  }
 
   catFile("README.md")
 
   "--------------------" tap println
 
   def lines(fileName: String): Seq[String] =
-    Using.resource(bufferedReader(fileName)) {
-      readLines
-    }
+    Using.resource(bufferedReader(fileName))(readLines)
 
-  lines("README.md") foreach println
+  def catFile2(fileName: String): Unit = { // might throw an exception
+    lines(fileName) foreach println
+  }
+
+  catFile2("README.md")
 
   "--------------------" tap println
 
