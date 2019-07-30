@@ -19,8 +19,8 @@ object LiteralTypes213 extends App {
   other_one tap println
   implicitly[other_one.type =:= 1]
 
-  valueOf[42] tap println // is the same as ...
-  new scala.ValueOf(42).value tap println
+  val x1: Int = valueOf[42] tap println // is the same as ...
+  val x2: Int = new scala.ValueOf(42).value tap println
 
   println("==========\n")
 }
