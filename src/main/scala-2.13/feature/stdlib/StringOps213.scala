@@ -2,9 +2,9 @@ package feature.stdlib;
 
 import scala.util.chaining._
 
-object StringExt213 extends App {
+object StringOps213 extends App {
 
-    println("\n========== StringExt 2.13")
+    println("\n========== StringOps 2.13")
 
     "----- String#toIntOption" tap println
     val i1 = "42".toInt tap println

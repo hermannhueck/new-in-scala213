@@ -1,17 +1,11 @@
 package feature.stdlib
 
 import compat213.chaining._
+import compat213.string._
 
-object StringExt212 extends App {
+object StringOps212 extends App {
 
-    println("\n========== StringExt 2.12")
-
-    implicit class StringOps(private val s: String) {
-        import scala.util.Try
-        def toIntOption: Option[Int] = Try(s.toInt).toOption
-        def toDoubleOption: Option[Double] = Try(s.toDouble).toOption
-        def toBooleanOption: Option[Boolean] = Try(s.toBoolean).toOption
-    }
+    println("\n========== StringOps 2.12")
 
     "----- String#toIntOption" tap println
     val i1 = "42".toInt tap println
