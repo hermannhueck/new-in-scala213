@@ -3,8 +3,9 @@ package feature.stdlib
 import java.io.{BufferedReader, FileReader}
 
 import scala.util.{Failure, Success, Try}
-import util.chaining._
-import util.Using
+
+import compat213.chaining._
+import compat213.Using
 
 object Using212 extends App {
 

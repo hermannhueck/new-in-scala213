@@ -1,7 +1,5 @@
 package feature.stdlib
 
-import util.chaining._
-
 object Chaining212 extends App {
 
     println("\n========== Chaining 2.12")
@@ -20,6 +18,8 @@ object Chaining212 extends App {
     println("-----")
 
     {
+        import compat213.chaining._
+
         val x: Int = 5 tap println
 
         val y: Int = 5 pipe (_ * x) tap println

@@ -1,6 +1,6 @@
 package feature.language
 
-import util.chaining._
+import compat213.chaining._
 
 object SymbolLiterals212 extends App {
 

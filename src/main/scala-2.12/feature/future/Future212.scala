@@ -3,7 +3,7 @@ package feature.future
 import scala.concurrent._
 import scala.concurrent.duration._
 
-import util.chaining._
+import compat213.chaining._
 
 object Future212 extends App {
 

@@ -1,6 +1,6 @@
 package feature.stdlib
 
-import util.chaining._
+import compat213.chaining._
 
 object StringExt212 extends App {
 

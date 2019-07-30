@@ -4,7 +4,7 @@ import scala.collection.compat.immutable.ArraySeq
 import scala.collection.immutable
 import scala.collection.mutable.ArrayBuffer
 
-import util.chaining._
+import compat213.chaining._
 
 object Seq212 extends App {
 

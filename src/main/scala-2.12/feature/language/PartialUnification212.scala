@@ -1,7 +1,8 @@
 package feature.language
 
-import util.either._
 import scala.language.higherKinds
+
+import compat213.either._
 
 /*
   Scala 2.12: code compiles only with -Ypartial-unification enabled
