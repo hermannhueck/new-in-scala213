@@ -23,10 +23,10 @@ object PartialUnification212 extends App {
     fa.toString
 
   val either: Either[String, Int] = Right(42).withLeft[String]
-  foo { either }
+  foo(either)
 
   val intToInt: Function1[Int, Int] = x => x * 2
-  foo { intToInt }
+  foo(intToInt)
 
   println("==========\n")
 }
