@@ -10,7 +10,7 @@ object Breakout212 extends App {
     // https://stackoverflow.com/questions/1715681/scala-2-8-breakout
 
     val list = List(1, 2, 3) tap println
-    val toPair: Int => (Int, Int) = x => x-> x
+    val toPair: Int => (Int, Int) = x => x -> x
     println
 
     val indexedSeq                      = list.map(toPair)(collection.breakOut)
