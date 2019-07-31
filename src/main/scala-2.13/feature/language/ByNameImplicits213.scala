@@ -1,7 +1,5 @@
 package feature.language
 
-import scala.util.chaining._
-
 /*
   see:
   https://docs.scala-lang.org/sips/byname-implicits.html
