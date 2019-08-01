@@ -204,7 +204,7 @@ The list of features is not comprehensive, but it is my personal selection of fa
 I will focus on those features which IMO impact/ease the programmers live most.
 
 I will look at 5 feature areas: compiler, standard library, language changes,
-Future and finally collections which have been redesinged in 2.13.
+Future and finally collections which have been redesigned in 2.13.
 ---
 
 # Agenda
@@ -213,9 +213,10 @@ Future and finally collections which have been redesinged in 2.13.
 1. [Release Summary](#release_summary)
 1. [Compiler](#compiler)
 1. [Standard Library](#standard_library)
+1. [Concurrency / Future](#concurrency_future)
 1. [Language Changes](#language_changes)
-1. [Future](#future)
 1. [Collections](#collections)
+1. [Architecture of Collections](#architecture_collections)
 1. [Migration](#migration)
 1. [References](#references)
 
@@ -309,10 +310,411 @@ name: standard_library
 
 ---
 
-class: middle, center
-name: language_changes
+<br/>
+<br/>
+## Smaller Footprint
+<br/>
 
-# 4. Language Changes
+###No longer included:
+
+- ###*scala-parallel-collections*
+
+- ###*scala-xml*
+
+- ###*scala-parser-combinators*
+
+- ###*scala-swing*
+
+---
+
+<br/>
+<br/>
+## Integrated Java Interop
+<br/>
+
+### The old *scala-java8-compat* module is now part of the standard library.
+
+### This provides converters for options, function types and Java streams.
+
+### *scala.collection.JavaConversions* removed (were already deprecated in 2.12)
+
+---
+
+<br/>
+## Chaining: *pipe* &nbsp;and *tap*
+<br/>
+
+```scala
+import scala.util.chaining._
+
+val x: Int = 5 tap println
+
+val y: Int = 5 pipe (_ * x) tap println
+
+List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
+
+val times6 = (_: Int) * 6
+(1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
+```
+
+--
+
+<br/>
+*x pipe f* is a replacement for *f(x)*, where f is a *Function1[A => B]*.
+
+*x tap f* is a replacement for *x => { f(x)*; x }, where f is a side-effecting *Function1[A => Unit]*.
+*tap* performs the side effect in *f(x)* and returns *x* unchanged.
+
+---
+
+<br/>
+## Backport to 2.12: *pipe* &nbsp;and *tap*
+<br/>
+
+```scala
+package compat213
+
+package object chaining {
+
+  implicit class ChainingOps[A](private val a: A) {
+    def pipe[B](f: A => B): B = f(a)
+    def |>[B](f: A => B): B = a pipe f
+    def tap[B](f: A => Unit): A = a pipe ( x => { f(x); x } )
+  }
+}
+```
+
+--
+
+```scala
+import compat213.chaining._
+
+val x: Int = 5 tap println
+
+val y: Int = 5 pipe (_ * x) tap println
+
+List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
+
+val times6 = (_: Int) * 6
+(1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
+```
+
+---
+
+<br/>
+## Either: *Right.withLeft* &nbsp;and *Left.withRight*
+<br/>
+
+The constructor *Right* leaves the left type unspecified.<br/>
+The constructor *Left* leaves the right type unspecified.
+
+<br/>
+```html
+sbt:New in Scala 2.13> ++2.13.0 console
+...
+[info] Starting scala interpreter...
+Welcome to Scala 2.13.0 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_212).
+Type in expressions for evaluation. Or try :help.
+
+scala> Right(5)
+res0: scala.util.Right[Nothing,Int] = Right(5)
+
+scala> Right(5).withLeft[String]
+res1: scala.util.Either[String,Int] = Right(5)
+
+scala> Left("some error")
+res2: scala.util.Left[String,Nothing] = Left(some error)
+
+scala> Left("some error").withRight[Int]
+res3: scala.util.Either[String,Int] = Left(some error)
+```
+
+---
+
+<br/>
+<br/>
+## Backport to 2.12:<br/>*Right.withLeft* &nbsp;and *Left.withRight*
+<br/>
+
+```scala
+package compat213
+
+package object either {
+
+  implicit class RightOps[L, R](private val right: Right[L, R]) {
+    def withLeft[LL](implicit ev: L <:< LL): Either[LL, R] = right.asInstanceOf[Either[LL, R]]
+  }
+
+  implicit class LeftOps[L, R](private val left: Left[L, R]) {
+    def withRight[RR](implicit ev: R <:< RR): Either[L, RR] = left.asInstanceOf[Either[L, RR]]
+  }
+}
+```
+
+---
+
+<br/>
+<br/>
+## *Either.flatten*
+<br/>
+
+- available since 2.13
+
+- in 2.12 you can flatten a nested *Either* with *flatMap*.
+
+--
+
+.left-column-50[
+
+### Scala 2.12
+
+```scala
+val nestedEither = Right(Right(5))
+nestedEither.flatMap(x => x)
+```
+]
+
+.right-column-50[
+
+### Scala 2.13
+
+```scala
+val nestedEither = Right(Right(5))
+nestedEither.flatten
+```
+]
+
+---
+
+## String Operations:<br/>*toIntOption*, *toDoubleOption*, *toBooleanOption*
+<br/>
+
+- convert *String* literals to *Int*, *Double*, *Boolean* without throwing exceptions
+- return *Some(value)* if the conversion succeeds, *None* if it fails.
+
+--
+
+<br/>
+```html
+sbt:New in Scala 2.13> ++2.13.0 console
+...
+Welcome to Scala 2.13.0 (Java HotSpot(TM) 64-Bit Server VM, Java 1.8.0_212).
+
+scala> "42".toIntOption
+res0: Option[Int] = Some(42)
+
+scala> "42.0".toIntOption
+res1: Option[Int] = None
+
+scala> "42.0".toDoubleOption
+res2: Option[Double] = Some(42.0)
+
+scala> "true".toBooleanOption
+res3: Option[Boolean] = Some(true)
+```
+
+---
+
+<br/>
+<br/>
+## Backport to 2.12: String Operations
+<br/>
+
+```scala
+package compat213
+
+import scala.util.Try
+
+package object string {
+
+  implicit class StringOps(private val s: String) {
+    def toIntOption: Option[Int] = Try(s.toInt).toOption
+    def toDoubleOption: Option[Double] = Try(s.toDouble).toOption
+    def toBooleanOption: Option[Boolean] = Try(s.toBoolean).toOption
+  }
+}
+```
+
+---
+
+## *scala.util.Using* &nbsp;for resource management
+<br/>
+
+Similar to *try ... catch ... finally*,<br/>
+but guarantees to release/close the used resource.
+
+--
+
+<br/>
+```scala
+def bufferedReader(fileName: String): BufferedReader =
+  new BufferedReader(new FileReader(fileName))
+
+def readLines(reader: BufferedReader): Seq[String] =
+  ???
+
+def tryLines(fileName: String): Try[Seq[String]] =
+  Using(bufferedReader(fileName)) { reader => readLines(reader) }
+
+def catFile(fileName: String): Unit =
+  tryLines(fileName) match {
+    case Failure(exception) => exception.toString tap println
+    case Success(lines) => lines foreach println
+  }
+
+catFile("README.md")
+```
+
+---
+
+## *scala.util.Using.resource*
+<br/>
+returns an *A*, not a *Try[A]*
+
+--
+
+```scala
+package scala.util
+object Using { // simplified
+  def apply[R, A](resource: => R)(f: R => A): Try[A]
+  def resource[R, A](resource: => R)(f: R => A): A
+  ...
+}
+```
+
+--
+
+<br/>
+```scala
+def bufferedReader(fileName: String): BufferedReader = ???
+
+def readLines(reader: BufferedReader): Seq[String] = ???
+
+def lines(fileName: String): Seq[String] =
+  Using.resource(bufferedReader(fileName))(readLines)
+
+def catFile2(fileName: String): Unit = { // might throw an exception
+  lines(fileName) foreach println
+}
+
+catFile2("README.md")
+```
+
+---
+
+<br/>
+## Backport to 2.12: *Using*
+<br/>
+
+```scala
+package compat213
+
+import scala.util.Try
+import scala.language.reflectiveCalls
+
+object Using {
+
+  def apply[A, R <: {def close(): Unit}](resrc: R)(use: R => A): Try[A] =
+    Try(resource(resrc)(use))
+
+  def resource[A, R <: {def close(): Unit}](resrc: R)(use: R => A): A =
+    try {
+      use(resrc)
+    } finally {
+      resrc.close()
+    }
+}
+```
+
+--
+
+<br/>
+This impl is a bit simplistic, but should work for all resources which provide a method *close*.
+
+---
+
+<br/>
+<br/>
+## s-Interpolator in Pattern matches
+<br/>
+
+<br/>
+```scala
+val dateString = "11-June-2019"
+
+val s"$day-$month-$year" = dateString
+
+year tap println
+month tap println
+day tap println
+```
+
+---
+
+## Named Product Elements
+
+### Case classes and other *Product*s (Tuples) now have methods *productElementNames* and *productElementName*.
+
+--
+<br/>
+```scala
+sealed trait Gender extends Product with Serializable
+case object Male extends Gender
+case object Female extends Gender
+
+case class Person(name: String, age: Int, gender: Gender, email: String) {
+  def tupled: (String, Int, Gender, String) = (name, age, gender, email)
+}
+
+val johndoe = Person("John Doe", 42, Male, "john@doe.com")
+```
+--
+
+<br/>
+```scala
+johndoe.productElementNames foreach println
+
+johndoe.productElementName(0) tap (name => print(s"$name: "))
+johndoe.productElement(0) tap println
+johndoe.productElementName(1) tap (name => print(s"$name: "))
+johndoe.productElement(1) tap println
+```
+
+---
+
+<br/>
+### Naive JSON Serialization
+
+<br/>
+```scala
+def pairToJson(name: String, value: Any): String =
+  s"""{ "$name": $value }"""
+
+def productElementToJson(p: Product, index: Int): String =
+  pairToJson(p.productElementName(index), p.productElement(index))
+
+def productToJson(product: Product): String =
+  (0 until product.productArity)
+    .toList
+    .map { index => productElementToJson(product, index) }
+    .mkString("{ ", ", ", " }")
+
+implicit class ProductOps(private val product: Product) {
+  def toJsonString: String = productToJson(product)
+}
+
+johndoe.toJsonString tap println
+// { { "name": John Doe }, { "age": 42 }, { "gender": Male }, { "email": john@doe.com } }
+johndoe.tupled.toJsonString tap println
+// { { "_1": John Doe }, { "_2": 42 }, { "_3": Male }, { "_4": john@doe.com } }
+```
+
+---
+
+class: middle, center
+name: concurrency_future
+
+# 4. Concurrency / Future
 <br/>
 <br/>
 <br/>
@@ -322,16 +724,235 @@ name: language_changes
 
 ---
 
-class: middle, center
-name: future
+<br/>
+## *Future* + *ExecutionContext* &nbsp;Changes Overview
+<br/>
 
-# 5. Future
+- API nearly unchanged
+
+- Massive performance improvements under the hood (*Future*, *Promise*, *ExecutionContext*)
+
+- Improved handling of failures (*InterruptedException, RejectedExecutionException*)
+
+- Made the global *ExecutionContext* “batched”
+
+- Added synchronous ("parasitic") ExecutionContext
+
+.footnote[
+  For more details on the internals of the improved implementation
+  see Viktor Klang's talk at Scala Days 2019: Making Our Future Better
+]
+.footnote2[
+  https://www.youtube.com/watch?v=5FTJUUoT6y4
+]
+
+---
+
+<br/>
+<br/>
+## *Future* : Minor API Changes
+<br/>
+<br/>
+
+- *removed *onSuccess* and *onFailure* (already deprecated in 2.12)
+
+- *Future.delegate* - new factory method
+
+---
+
+<br/>
+## *Future.delegate*
+<br/>
+
+```scala
+object Future {
+  def apply[T](body: => T)(implicit executor: ExecutionContext): Future[T]
+  def delegate[T](body: => Future[T])(implicit executor: ExecutionContext): Future[T]
+  ...
+}
+```
+
+--
+
+<br/>
+The following expressions are semantically equivalent:
+
+```scala
+  def expr[T]: Future[T] = ???
+
+  val f1 = Future.delegate(expr)
+  val f2 = Future.apply(expr).flatten
+  val f3 = Future.unit.flatMap(_ => expr)
+```
+
+---
+
+<br/>
+## *Future.delegate* - Example
+<br/>
+
+```scala
+import scala.concurrent._
+import scala.concurrent.duration._
+import scala.util.chaining._
+
+implicit lazy val ec: ExecutionContext = ExecutionContext.global
+
+def plus17(x: Int): Int = x + 17
+
+def squaredAsync(value: Int) = Future { value * value }
+
+val f1: Future[Int] = Future.apply { squaredAsync(5) }.flatten map plus17
+val f2: Future[Int] = Future.unit.flatMap { _ => squaredAsync(5) } map plus17
+val f3: Future[Int] = Future.delegate { squaredAsync(5) } map plus17
+
+Await.result(f1, 3.seconds) tap println   //=> 42
+Await.result(f2, 3.seconds) tap println   //=> 42
+Await.result(f3, 3.seconds) tap println   //=> 42
+```
+
+---
+
+class: middle, center
+name: language_changes
+
+# 5. Language Changes
 <br/>
 <br/>
 <br/>
 <br/>
 <br/>
 &nbsp;
+
+---
+
+## Language Changes Overview
+<br/>
+
+- Literal types: Literals (for strings, integers etc.) now have associated literal types.
+
+- Partial unification: on by default
+
+- By-name implicit parameters: enable implicit search to construct recursive values.
+
+- Underscores in numeric literals
+
+- Procedure syntax deprecated:<br/>
+  Deprecated: *def m() { ... }* &nbsp; &nbsp; &nbsp; Use instead: *def m(): Unit = { ... }*
+
+- View bounds deprecated:<br/>
+  Deprecated: *A &lt;% B* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Use instead: *(implicit ev: A => B)*
+
+- Symbol literals deprecated:<br/>
+  Deprecated: *'foo* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Use instead: *Symbol("foo")*
+
+---
+
+<br/>
+## Underscores in Number Literals
+<br/>
+<br/>
+
+```scala
+val int0: Int = 1000000
+val int1: Int = 1_000_000
+val int2: Int = 1_0_0_0_0_0_0
+
+// val int3: Int = 1_0_0_0_0_0_0_
+// compile error: trailing separator is not allowed
+
+val long: Long = 1_000_000_000L
+val float: Float = 1_000.99f
+val double: Double = 1_000_000.999_999
+```
+
+---
+
+## Partial unification
+
+<br/>
+- Partial unification is on by default in 2.13.
+- The compiler no longer accepts *-Ypartial-unification*.
+- The following code compiles in 2.12 only with *-Ypartial-unification*.
+
+--
+
+<br/>
+```scala
+import scala.language.higherKinds
+
+def foo[F[_], A](fa: F[A]): String =
+fa.toString
+
+val either: Either[String, Int] = Right(42).withLeft[String]
+foo { either }
+
+val intToInt: Function1[Int, Int] = x => x * 2
+foo { intToInt }
+```
+
+--
+
+<br/>
+Detailed explanation of partial unification here:<br/>
+https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
+
+---
+
+<br/>
+## Literal Types
+
+<br/>
+- Literals (for strings, integers etc.) now have associated literal types.
+- The compiler will provide instances of a new typeclass *scala.ValueOf[T]* for all singleton types *T*.
+- The value of a singleton type can be accessed by calling method *valueOf[T]*.
+
+--
+
+<br/>
+```scala
+val wahr: true = true
+
+val foo: "foo" = "foo"
+
+val one: 1 = 1
+
+val other_one: one.type = one
+implicitly[other_one.type =:= 1]
+
+val x1: Int = valueOf[42] // valueOf[42] yields an Int and is the same as ...
+val x2: Int = new scala.ValueOf(42).value
+```
+
+---
+
+<br/>
+## By-name Implicit Parameters
+
+<br/>
+- were not allowed in 2.12.
+- They enable implicit search to construct recursive values.
+- The following code will not compile<br/>
+  if you remove the &nbsp; *=>* &nbsp; in &nbsp; *(implicit rec: => Foo)* &nbsp; .
+
+--
+
+<br/>
+```scala
+trait Foo {
+  def next: Foo
+}
+
+object Foo {
+  // wouldn't compile, if rec were a call by value parameter
+  // remove the => and try to compile ...
+  implicit def foo(implicit rec: => Foo): Foo =
+    new Foo { def next = rec }
+}
+
+val foo = implicitly[Foo]
+assert(foo eq foo.next)
+```
 
 ---
 
@@ -348,16 +969,820 @@ name: collections
 
 ---
 
-class: middle, center
-name: migration
+<br/>
+<br/>
+## Principles of the Collections Redesign
+<br/>
+<br/>
 
-# 7. Migration
+- simplicity
+  - better error messages
+  - easier to implement your own collection (but still complex)
+
+- performance
+
+- type safety, better type inference
+
+- smaller footprint: parallel collections moved to a module of it's own.
+
+- source code compatibility - as much as possible<br/>
+  Most ordinary code that used the old collections will continue to work as-is.
+  But of course ... there are <u>breaking changes</u>.
+
+---
+
+## Scala 2.13 Collection Related Links
+<br/>
+
+- Implementing the Scala 2.13 collections<br/>
+  Stefan Zeiger's talk at Scala Days 2019 in Lausanne<br/>
+  https://www.youtube.com/watch?v=L1lxZ1LBuGI
+  
+- The Architecture of Scala 2.13's Collections<br/>
+  https://docs.scala-lang.org/overviews/core/architecture-of-scala-213-collections.html
+
+- Migratin a project to Scala 2.13's Collections<br/>
+  https://docs.scala-lang.org/overviews/core/collections-migration-213.html
+
+- Scala 2.13 Collection Compatibility Library<br/>
+  https://github.com/scala/scala-collection-compat
+
+- Let them be Lazy<br/>
+  Julien Richard Foy's blog on the lazy collection (Views and LazyList)<br/>
+  https://www.scala-lang.org/blog/2017/11/28/view-based-collections.html
+
+- Scala 2.13's Collections Rework<br/>
+  Stefan Zeiger's blog on the collections rework<br/>
+  https://www.scala-lang.org/blog/2017/02/28/collections-rework.html
+
+---
+
+<br/>
+## Simpler Method Signatures
+<br/>
+
+- No more *CanBuildFrom*
+
+- Without *CanBuildFrom* method signatures became much simpler.
+
+--
+
+### *List#map* &nbsp;in 2.12
+
+```scala
+trait List[+A] extends ... {
+  def map[B, That](f: A => B)(implicit bf: CanBuildFrom[List[A], B, That]): That = ???
+}
+```
+
+### *List#map* &nbsp;in 2.13
+
+```scala
+trait List[+A] extends ... {
+  def map[B](f: A => B): List[B] = ???
+}
+```
+
+---
+
+## Removed *collection.breakOut*
+
+- *collection.breakOut* in 2.12 inferred the return type of a collection operation from the expected result type.
+
+- It was based on *CanBuildFrom* which gone in 2.13.
+
+- To avoid constructing intermediate collections, use *.view* and *.to(Collection)* instead.
+
+--
+
+```scala
+val list = List(1, 2, 3) tap println
+val toPair: Int => (Int, Int) = x => x -> x
+```
+
+```scala
+// Scala 2.12 - type annotations required to infer the result type of list.map
+val indexedSeq                      = list.map(toPair)(collection.breakOut)
+val array   : Array[(Int, Int)]     = list.map(toPair)(collection.breakOut)
+val seq     : Seq[(Int, Int)]       = list.map(toPair)(collection.breakOut)
+val set     : Set[(Int, Int)]       = list.map(toPair)(collection.breakOut)
+val map     : Map[Int, Int]         = list.map(toPair)(collection.breakOut)
+```
+
+```scala
+// Scala 2.13 - type annotations not required
+val list2                           = list.iterator.map(toPair)
+val array                           = list.iterator.map(toPair).to(Array)
+val seq                             = list.iterator.map(toPair).to(Seq)
+val set                             = list.iterator.map(toPair).to(Set)
+val map                             = list.iterator.map(toPair).to(Map)
+```
+
+---
+
+<br/>
+<br/>
+## Simpler Type Hierarchy
+<br/>
+<br/>
+
+
+- No more *Traversable* and *TraversableOnce*.
+
+  - They remain only as deprecated aliases for *Iterable* and *IterableOnce*.
+
+<br/>
+- Parallel collections are now a separate module.
+
+  - As a result, *GenSeq*, *GenTraversableOnce*, et al. are gone.
+
+
+---
+
+<br/>
+<br/>
+## New, Faster HashMap/Set Implementations
+<br/>
+<br/>
+
+
+- Both immutable and mutable versions were completely replaced.
+
+- They substantially outperform the old implementations in most scenarios.
+
+- The mutable versions now perform on par with the Java standard library's implementations.
+
+
+---
+
+<br/>
+<br/>
+## Immutable *scala.Seq* &nbsp;and *scala.IndexedSeq*
+<br/>
+<br/>
+
+
+- *Seq* is now an alias for *collection.immutable.Seq*.
+  - Before, it was an alias for the possibly-mutable *collection.Seq*.
+
+- *IndexedSeq* is now an alias for *collection.immutable.IndexedSeq*.
+  - Before, it was an alias for the possibly-mutable *collection.IndexedSeq*.
+
+- This also changes the type of varargs in methods and pattern matches.
+
+- Arrays passed as varargs are defensively copied.
+
+---
+
+<br/>
+## *Seq* &nbsp;is immutable in 2.13 (not in 2.12)
+<br/>
+
+```scala
+trait Order
+trait Food
+
+def orderFood(order: Seq[Order]): Seq[Food] = {
+    Seq(new Food{})
+}
+```
+
+--
+
+<br/>
+### Passing a mutable *ArrayBuffer* ...
+
+```scala
+// We can NOT pass a mutable ArrayBuffer where an immutable Seq is expected.
+val food1 = orderFood(ArrayBuffer(new Order{})) // DOES NOT COMPILE!
+//  [error]  found   : scala.collection.mutable.ArrayBuffer[Order]
+//  [error]  required: Seq[Order]
+```
+
+---
+
+<br/>
+### Passing a mutable *Array* ...
+<br/>
+
+We can pass a mutable *Array* where an immutable *Seq* is expected.<br/>
+*Array* (unlike *ArrayBuffer*) is implicitly converted (and copied).<br/> 
+But the compiler spits out a warning.
+
+```scala
+val orderArray = Array(new Order {})
+
+val food2 = orderFood(orderArray)     // COMPILES!
+// [warn] Implicit conversions from Array to immutable.IndexedSeq
+// [warn] are implemented by copying; Use the more efficient non-copying
+// [warn] ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call.
+```
+
+--
+
+<br/>
+*toSeq* (or *toIndexedSeq*) wraps the mutable *Array* in an immutable *Seq*.
+
+```scala
+val food3 = orderFood(orderArray.toSeq)           // COMPILES!
+val food4 = orderFood(orderArray.toIndexedSeq)    // COMPILES!
+```
+
+---
+
+<br/>
+### Passing a immutable *ArraySeq* ...
+<br/>
+
+- *ArraySeq* is a new collection of Scala 2.13.
+
+- *ArraySeq* is an immutable array with efficient indexed access and a small memory footprint.
+
+- A *mutable.ArraySeq* is also available in the new collections library.
+
+- For Scala 2.12 an *ArraySeq* backport is also available in the *scala-collection-compat* library.
+
+- *ArraySeq.unsafeWrapArray* wraps an *Array* into an *ArraySeq*.
+
+<br/>
+```scala
+val food5 = orderFood(ArraySeq(new Order{}))
+val food6 = orderFood(ArraySeq.unsafeWrapArray(Array(new Order{})))
+```
+
+---
+
+<br/>
+## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+<br/>
+
+### Seq Recap
+
+- *scala.collection.Seq* is a base class for *scala.collection.immutable.Seq* and *scala.collection.mutable.Seq* in Scala 2.12 and 2.13.
+
+- *scala.Seq* is an alias for *scala.collection.Seq* in Scala 2.12.
+
+- *scala.Seq* is an alias for *scala.collection.immutable.Seq* in Scala 2.13.
+
+--
+
+<br/>
+<br/>
+To make your 2.12 code cross-compilable for 2.12 and 2.13 you have
+
+### 3 Options described below ...
+
+---
+
+<br/>
+## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+<br/>
+
+### Use *scala.collection.Seq* &nbsp;in method parameters and return types.
+
+```scala
+import scala.collection
+
+def orderFood(order: collection.Seq[Order]): collection.Seq[Food] = ???
+```
+
+--
+
+<br/>
+- You don't force your code into immutable semantics.
+- *orderFood* accepts mutable and immutable *Seq*s.
+- mutability / immutability is unspecified for the return type.
+- Caller must call *.toSeq* if she needs an immutable result. (*.toSeq* only copies elements if the result is not yet immutable.)
+
+**Simplest migration strategy!**<br/>
+**No changes at the call site!**
+
+---
+
+<br/>
+## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+<br/>
+
+### Use *scala.collection.Seq* &nbsp;in method parameters and *scala.collection.immutable.Seq* &nbsp; in return types.
+
+```scala
+import scala.collection
+import scala.collection.immutable
+
+def orderFood(order: collection.Seq[Order]): immutable.Seq[Food] = ???
+```
+
+--
+
+<br/>
+- You force your code into immutable semantics only for return types.
+- *orderFood* accepts mutable and immutable *Seq*s.
+- immutability is fixed for the return type.
+
+**Still simple migration strategy!**<br/>
+**Mostly no changes at the call site!**
+
+---
+
+<br/>
+## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+<br/>
+
+### Use *scala.immutable.collection.Seq* &nbsp;in method parameters and return types.
+
+```scala
+import scala.collection.immutable
+
+def orderFood(order: immutable.Seq[Order]): immutable.Seq[Food] = ???
+```
+
+--
+
+<br/>
+- You force your code into immutable semantics.
+- *orderFood* accepts only immutable *Seq*s.
+- immutability is also fixed for the return type.
+
+**Possibly many changes at the call site to make the arguments immutable!**<br/>
+**ScalaFix can automate this for a large code base.**
+
+---
+
+<br/>
+<br/>
+## Simplified Views that Work
+<br/>
+<br/>
+
+- Views have been vastly simplified and should now work reliably.
+
+- *scala.collection.View* has two sub classes: *scala.collection.SeqView* and *scala.collection.MapView*
+
+- Views are lazy. They just record the operations (like *filter*, *map* etc.) do not execute them
+  until a terminal operation (*foreach*, *toSeq*, *toMap* etc.) is invoked.
+
+---
+
+## *Map#mapValues* &nbsp;and *Map#filterKeys*
+
+- *Map#mapValues* and *Map#filterKeys* in 2.13 return *MapView*, not *Map*.
+
+- These methods are also deprecated.
+
+- Prefer using *MapView#mapValues* and *MapView#filterKeys*
+
+--
+
+<br/>
+```scala
+val kvs = Map("one" -> 1, "two" -> 2, "three" -> 3)
+val kvsFlipped: Map[Int, String] = kvs.toList.map { case (fst, snd) => (snd, fst) }.toMap
+```
+
+.left-column-50[
+
+### Scala 2.12
+
+```scala
+
+
+val mappedValues: Map[String, Int] =
+  kvs.mapValues(_ + 10)
+
+
+
+val keysFiltered: Map[Int, String] =
+  kvsFlipped.filterKeys(_ %2 != 0)
+```
+]
+
+.right-column-50[
+
+### Scala 2.13
+
+```scala
+val mapView: MapView[String, Int] =
+  kvs.view.mapValues(_ + 10)
+val mappedValues: Map[String, Int] =
+  mapView.toMap
+
+val mapView2: MapView[Int, String] =
+  kvsFlipped.view.filterKeys(_ %2 != 0)
+val keysFiltered: Map[Int, String] =
+  mapView2.toMap
+```
+]
+
+---
+
+<br/>
+## *LazyList* &nbsp;replaces *Stream*
+<br/>
+
+- *Stream* is lazy in it's tail, but eager in it's head.
+
+- *LazyList* is lazy in it's head and tail.
+
+- *Stream* is deprecated in 2.13.
+<br/>
+
+.left-column-50[
+
+### Scala 2.12
+
+```scala
+val stream: Stream[(Int, Int)] =
+  Stream.continually(42)
+    .take(10)
+    .zipWithIndex
+    .map { case (value, index) =>
+      (index, value)
+    }
+```
+]
+
+.right-column-50[
+
+### Scala 2.13
+
+```scala
+val ll: LazyList[(Int, Int)] =
+  LazyList.continually(42)
+    .take(10)
+    .zipWithIndex
+    .map { case (value, index) =>
+      (index, value)
+    }
+```
+]
+
+---
+
+<br/>
+## New Abtract and Concrete Collections
+<br/>
+
+- *immutable.LazyList* replaces *immutable.Stream*.
+
+- *immutable.ArraySeq* is an immutable wrapper for an array; there is also a mutable version.
+
+- *mutable.CollisionProofHashMap* guards against denial-of-service attacks.
+
+- *mutable.ArrayDeque* is a double-ended queue that internally uses a resizable circular buffer.
+
+- *mutable.Stack* was reimplemented (and undeprecated), *immutable.Stack* was removed.
+
+- *immutable.SeqMap* (abstract) provides immutable maps that maintain insertion order.
+
+- Implementations: *VectorMap* and *TreeSeqMap* (in addition to the already existing *ListMap*)
+
+---
+
+<br/>
+## *Coll#to* &nbsp;converts one collection to another one.
+<br/>
+
+- *Coll#to* in 2.12 received the target type in square brackets.
+
+- *Coll#to* in 2.13 receives the target type's companion in parens.
+
+- The *scala-collection-compat* library provides the new behaviour in 2.12.
+
+<br/>
+```scala
+val map = Map("one" -> 1, "two" -> 2, "three" -> 3)
+```
+
+.left-column-50[
+
+### Scala 2.12
+
+```scala
+val l1 = map.toList
+val l2 = map.to[List]
+
+import scala.collection.compat._
+val l3 = map.to(List)
+```
+]
+
+.right-column-50[
+
+### Scala 2.13
+
+```scala
+val l1 = map.toList
+val l2 = map.to(List)
+
+
+//
+```
+]
+
+---
+
+<br/>
+<br/>
+## Added *.lengthIs / .sizeIs* &nbsp;and *.sizeCompare*
+<br/>
+<br/>
+
+- Allow fluent size comparisons without traversing the whole collection.
+
+--
+
+<br/>
+```scala
+val xs = List.fill(5000)(scala.util.Random.nextInt)
+
+// lenghtIs or sizeIs traverse no more than 101 element
+if (xs.lengthIs > 100) {
+    new IllegalArgumentException("Too many elements!") tap println
+} else {
+    s"The list has ${xs.length} elements." tap println
+}
+```
+
+---
+
+<br/>
+<br/>
+## New *.tapEach* &nbsp;method for side-effects
+<br/>
+<br/>
+
+- Allows inserting side-effects in a chain of method calls on a collection or view.
+
+--
+
+<br/>
+```scala
+val doubledAndSquared =
+  List(1, 2, 3)
+    .tapEach(x => println(s"value: $x"))
+    .map(x => x * 2)
+    .tapEach(x => println(s"doubled: $x"))
+    .map(x => x * x)
+    .tapEach(x => println(s"squared: $x"))
+```
+
+---
+
+## New *.unfold* &nbsp;method
+
+- This allows constructing a collection or iterator from an initial element
+  and a repeated *Option*-returning operation, terminating on *None*.
+
+- This was added to collection companion objects and to *Iterator*.
+
+--
+
+```scala
+def bufferedReader(fileName: String) =
+  new BufferedReader(new FileReader(fileName))
+
+def readLines(reader: BufferedReader) =
+  Iterator.unfold(())(_ => Option(reader.readLine()).map(_ -> ())).toList
+
+def readLines_dissected(reader: BufferedReader): List[String] = {
+  val initialState: Unit = ()
+  val iterator: Iterator[String] = Iterator.unfold(initialState) { _ =>
+    val maybeLine: Option[String] = Option(reader.readLine())
+    val maybeLineState: Option[(String, Unit)] = maybeLine.map(_ -> ())
+    maybeLineState
+  }
+  iterator.toList
+}
+
+val lines: Seq[String] =
+  Using.resource(bufferedReader("README.md"))(readLines)
+
+lines foreach println
+```
+
+---
+
+<br/>
+## Two overloaded *Map#map* &nbsp;operations! Why ???
+<br/>
+
+```scala
+def map[K2, V2](f: ((K, V)) => (K2, V2)): Map[K2, V2]
+```
+
+```scala
+def map[B](f: ((K, V)) => B): Iterable[B]
+```
+
+--
+
+<br/>
+- If the mapping function *f* transforms a key value pair *(K, V)* into another key value pair *(K2, V2)*,
+  *map* returns a *Map[K2, V2]*.
+
+- OTOH if the mapping function *f* transforms a key value pair *(K, V)* into some other value *B*,
+  *map* returns a *Iterable[B]*.
+
+- Roughly the same holds for the two *Map#flatMap* operations.
+
+- To understand this we have to take a squint into the collections' architecture.
+
+---
+
+class: middle, center
+name: architecture_collections
+
+# 7. Architecture of Collections
 <br/>
 <br/>
 <br/>
 <br/>
 <br/>
 &nbsp;
+
+---
+
+## Problem to solve
+
+### Define the return type of a collection operation in a generic way?
+
+- This is not a problem for operations, which do not return a collection, but a single value
+  like *isEmpty*, *length*, *find*, *foldLeft*, *sum*, *exists*, *forall* etc.
+  
+- This is difficult for operations that return a collection
+  like *filter*, *take*, *drop*, *map*, *flatMap*, *flatten* etc.
+
+--
+
+A Non-solution with simple inheritance
+
+```scala
+trait Iterable[A] {
+  def filter(f: A => Boolean): Iterable[A]
+  def map[B](f: A => B): Iterable[B]
+}
+```
+
+```scala
+trait List[A] extends Iterable[A] { ... }
+trait Vector[A] extends Iterable[A] { ... }
+```
+
+The inherited methods would return an *Iterable*, not a *List* or *Vector*.
+
+---
+
+<br/>
+## What we need ...
+
+```scala
+trait List[A] extends MagicBaseTrait[???, ???, ???] {
+  def filter(f: A => Boolean): List[A]
+  def map[B](f: A => B): List[B]
+}
+
+trait Vector[A] extends MagicBaseTrait[???, ???, ???] {
+  def filter(f: A => Boolean): Vector[A]
+  def map[B](f: A => B): Vector[B]
+}
+
+trait Map[K, V] extends MagicBaseTrait[???, ???, ???] {
+  def filter(f: (K, V) => Boolean): List[A]
+  def map[K2, V2](f: (K, V) => (K2, V2)): Map[K2, V2]
+  def map[B](f: (K, V) => B): Iterable[B]
+}
+```
+
+... without being forced to reimplement the operations in every collection.
+
+--
+
+### In the old collection implementation (up to 2.12) this problem has been solved with *CanBuildFrom*.
+
+---
+
+<br/>
+## Selections and Transformations
+<br/>
+
+- **Selection operations** (*filter*, *take*, *drop* etc.) do not change the elements.
+
+  - The target type of the operation is exactly the same as the source type,<br/>
+    e.g. *filter* on a *List[A]* returns a *List[A]*.
+  - We must abstract over the source collection type (*List[A]*) in this case) to generalize this.
+
+- **Transformation operations** (*map*, *flatMap* etc.) do change the elements
+  and in some cases (*Map* and some others) also the collection type.
+
+  - The target type of the operation must be derived
+    from the type constructor of the required result collection type.
+
+---
+
+## *IterableOps*
+<br/>
+
+```scala
+trait IterableOps[+A, +CC[_], +C] {
+  def filter(p: A => Boolean): C = ???
+  def map[B](f: A => B): CC[B] = ???
+}
+```
+
+```scala
+trait List[+A] extends Iterable[A] with IterableOps[A, List, List[A]] {...}
+trait Vector[+A] extends Iterable[A] with IterableOps[A, Vector, Vector[A]] {...}
+```
+
+--
+
+<br/>
+- *IterableOps* is the MagicBaseTrait we are looking for.
+
+- *IterableOps* is called a template trait.
+
+- *IterableOps* has 3 type parameters, one for the element type (*A*), one for the collection type (*C*)
+  and one for the collection constructor type (*CC*).
+
+- Leaf collection types with one type parameter (*List*, *Vector*) extend *IterableOps*.
+
+- This does not work for collections like *Map* with two type parameters.
+
+---
+
+## *MapOps*
+<br/>
+
+```scala
+trait MapOps[K, +V, +CC[_, _], +C] extends IterableOps[(K, V), Iterable, C] {
+  def map[K2, V2](f: ((K, V)) => (K2, V2)): CC[K2, V2] = ???
+}
+```
+
+```scala
+trait Map[K, V] extends Iterable[(K, V)] with MapOps[K, V, Map, Map[K, V]]
+```
+
+--
+
+<br/>
+- *MapOps* extends *IterableOps* and hence inherits all its operations.
+
+- *MapOps* instantiates the collection type constructor *CC* with *Iterable*.
+
+- *MapOps* inherits a *map* operation from *IterableOps* returning *Iterable[B]*.
+
+- *MapOps* defines another *map* operation overload returning *Map[K2, V2]*.
+
+- *Map* inherits both *map* operations.
+
+---
+
+## Which *map* &nbsp;is chosen ...
+
+... when you invoke *Map#map* at the call site?
+
+<br/>
+```scala
+// from IterableOps
+def map[B](f: ((K, V)) => B): Iterable[B]
+
+// from MapOps
+def map[K2, V2](f: ((K, V)) => (K2, V2)): Map[K2, V2]
+```
+
+<br/>
+- *map* from *MapOps* is more specific by the rules of overloading resolution.
+
+- It will be chosen, if the *map* operation returns a pair of values.
+
+- Otherwise the operation from *IterableOps* applies.
+
+--
+
+<br/>
+**“same-result-type” principle**:<br/>
+&nbsp; &nbsp; &nbsp; Wherever possible a transformation method on a collection<br/>
+&nbsp; &nbsp; &nbsp; yields a collection of the same type.
+
+---
+
+class: middle, center
+name: migration
+
+# 8. Migration
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+&nbsp;
+
+---
+
+# TODO
+
+todo todo todo todo todo todo todo todo
 
 ---
 
@@ -374,7 +1799,7 @@ name: references
 
 ---
 
-### References
+## References
 
 - Code and Slides of this Talk:<br/>
   https://github.com/hermannhueck/new-in-scala213
@@ -382,20 +1807,36 @@ name: references
 - Official Release Description<br/>
   https://github.com/scala/scala/releases/tag/v2.13.0
 
-- XXXXXXXXXX<br/>
-  XXXXXXXXXX
+- Making Our Future Better<br/>
+  Viktor Klang's talk at Scala Days 2019<br/>
+  https://www.youtube.com/watch?v=5FTJUUoT6y4
+  
 
-- XXXXXXXXXX<br/>
-  XXXXXXXXXX
+---
 
-- XXXXXXXXXX<br/>
-  XXXXXXXXXX
+## Scala 2.13 Collection Related Links
+<br/>
 
-- XXXXXXXXXX<br/>
-  XXXXXXXXXX
+- Implementing the Scala 2.13 collections<br/>
+  Stefan Zeiger's talk at Scala Days 2019 in Lausanne<br/>
+  https://www.youtube.com/watch?v=L1lxZ1LBuGI
+  
+- The Architecture of Scala 2.13's Collections<br/>
+  https://docs.scala-lang.org/overviews/core/architecture-of-scala-213-collections.html
 
-- XXXXXXXXXX<br/>
-  XXXXXXXXXX
+- Migrating a project to Scala 2.13's Collections<br/>
+  https://docs.scala-lang.org/overviews/core/collections-migration-213.html
+
+- Scala 2.13 Collection Compatibility Library<br/>
+  https://github.com/scala/scala-collection-compat
+
+- Let them be Lazy<br/>
+  Julien Richard Foy's blog on the lazy collection (Views and LazyList)<br/>
+  https://www.scala-lang.org/blog/2017/11/28/view-based-collections.html
+
+- Scala 2.13's Collections Rework<br/>
+  Stefan Zeiger's blog on the collections rework<br/>
+  https://www.scala-lang.org/blog/2017/02/28/collections-rework.html
 
 ---
 
