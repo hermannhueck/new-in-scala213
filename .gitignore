@@ -6,6 +6,7 @@ target/
 .metals/
 .vscode/
 
+.history
 .dotty-ide-disabled
 
 .DS_Store
