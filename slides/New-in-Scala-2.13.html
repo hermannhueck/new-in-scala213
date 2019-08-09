@@ -63,7 +63,7 @@
         padding: 15px;
       }
       .inverse {
-        background: #001804ec;
+        background: #012908ec;
         color: #f3f3f3;
         text-shadow: 0 0 20px #333;
       }
@@ -196,20 +196,24 @@ https://github.com/hermannhueck/new-in-scala213
 
 ---
 
+<br/>
 # Abstract
 
 <br/>
+<br/>
 This presentation shows the feature updates from Scala 2.12 to 2.13.
 The list of features is not comprehensive, but it is my personal selection of favorites.
-I will focus on those features which IMO impact/ease the programmers live most.
+I will focus on those which IMO impact/ease the programmers live most.
 
 I will look at 5 feature areas: compiler, standard library, language changes,
 Future and finally collections which have been redesigned in 2.13.
 ---
 
-# Agenda
 <br/>
+# Agenda
 
+<br/>
+<br/>
 1. [Release Summary](#release_summary)
 1. [Compiler](#compiler)
 1. [Standard Library](#standard_library)
@@ -218,7 +222,7 @@ Future and finally collections which have been redesigned in 2.13.
 1. [Collections](#collections)
 1. [Architecture of Collections](#architecture_collections)
 1. [Migration](#migration)
-1. [References](#references)
+1. [Resources](#resources)
 
 ---
 
@@ -235,29 +239,30 @@ name: release_summary
 
 ---
 
+<br/>
 ## Release Summary
 
 <br/>
-2.13 improves Scala in the following areas:
+Release 2.13 improves Scala in the following areas:
 
-- **Collections**: Standard library collections have been overhauled for simplicity, performance, and safety.
+- <u>Collections</u>: Standard library collections have been overhauled for simplicity, performance, and safety.
   This is the centerpiece of the release.
 
 --
 
-- **Future**: is faster and more robust. 
+- <u>Future</u>: is faster and more robust. 
 
 --
 
-- **Standard library**: Elsewhere, useful classes and methods have been added.
+- <u>Standard library</u>: Elsewhere, useful classes and methods have been added.
 
 --
 
-- **Language**: Literal types, partial unification, by-name implicits, more.
+- <u>Language</u>: Literal types, partial unification, by-name implicits, more.
 
 --
 
-- **Compiler**: 5-10% faster, deterministic output, improved optimizer.
+- <u>Compiler</u>: 5-10% faster, deterministic output, improved optimizer.
 
 --
 
@@ -332,18 +337,19 @@ name: standard_library
 ## Integrated Java Interop
 <br/>
 
-### The old *scala-java8-compat* module is now part of the standard library.
+- The old *scala-java8-compat* &nbsp;module is now part of the standard library.
 
-### This provides converters for options, function types and Java streams.
+- This provides converters for options, function types and Java streams.
 
-### *scala.collection.JavaConversions* removed (were already deprecated in 2.12)
+- *scala.collection.JavaConversions* removed (already deprecated in 2.12).
 
 ---
 
 <br/>
-## Chaining: *pipe* &nbsp;and *tap*
 <br/>
+## Chaining: *pipe* &nbsp;and *tap*
 
+<br/>
 ```scala
 import scala.util.chaining._
 
@@ -405,8 +411,8 @@ val times6 = (_: Int) * 6
 ## Either: *Right.withLeft* &nbsp;and *Left.withRight*
 <br/>
 
-The constructor *Right* leaves the left type unspecified.<br/>
-The constructor *Left* leaves the right type unspecified.
+- The constructor *Right* leaves the left type unspecified.<br/>
+- The constructor *Left* leaves the right type unspecified.
 
 <br/>
 ```html
@@ -442,11 +448,13 @@ package compat213
 package object either {
 
   implicit class RightOps[L, R](private val right: Right[L, R]) {
-    def withLeft[LL](implicit ev: L <:< LL): Either[LL, R] = right.asInstanceOf[Either[LL, R]]
+    def withLeft[LL](implicit ev: L <:< LL): Either[LL, R] =
+      right.asInstanceOf[Either[LL, R]]
   }
 
   implicit class LeftOps[L, R](private val left: Left[L, R]) {
-    def withRight[RR](implicit ev: R <:< RR): Either[L, RR] = left.asInstanceOf[Either[L, RR]]
+    def withRight[RR](implicit ev: R <:< RR): Either[L, RR] =
+      left.asInstanceOf[Either[L, RR]]
   }
 }
 ```
@@ -486,7 +494,8 @@ nestedEither.flatten
 
 ---
 
-## String Operations:<br/>*toIntOption*, *toDoubleOption*, *toBooleanOption*
+<br/>
+## String Operations: *toIntOption* &nbsp;etc.
 <br/>
 
 - convert *String* literals to *Int*, *Double*, *Boolean* without throwing exceptions
@@ -537,7 +546,7 @@ package object string {
 
 ---
 
-## *scala.util.Using* &nbsp;for resource management
+## *scala.util.Using.apply* &nbsp;for resource management
 <br/>
 
 Similar to *try ... catch ... finally*,<br/>
@@ -682,10 +691,11 @@ johndoe.productElement(1) tap println
 
 ---
 
+## Named Product Elements
+
 <br/>
 ### Naive JSON Serialization
 
-<br/>
 ```scala
 def pairToJson(name: String, value: Any): String =
   s"""{ "$name": $value }"""
@@ -736,7 +746,8 @@ name: concurrency_future
 
 - Made the global *ExecutionContext* “batched”
 
-- Added synchronous ("parasitic") ExecutionContext
+- Added synchronous ("parasitic") *ExecutionContext*
+  (releases you from writing your own synchronous *ExecutionContext*)
 
 .footnote[
   For more details on the internals of the improved implementation
@@ -831,7 +842,7 @@ name: language_changes
 
 - Literal types: Literals (for strings, integers etc.) now have associated literal types.
 
-- Partial unification: on by default
+- Partial unification: enabled by default
 
 - By-name implicit parameters: enable implicit search to construct recursive values.
 
@@ -882,7 +893,7 @@ val double: Double = 1_000_000.999_999
 import scala.language.higherKinds
 
 def foo[F[_], A](fa: F[A]): String =
-fa.toString
+  fa.toString
 
 val either: Either[String, Int] = Right(42).withLeft[String]
 foo { either }
@@ -904,7 +915,7 @@ https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
 
 <br/>
 - Literals (for strings, integers etc.) now have associated literal types.
-- The compiler will provide instances of a new typeclass *scala.ValueOf[T]* for all singleton types *T*.
+- The compiler will provide instances of a new typeclass *scala.ValueOf\[T]* for all singleton types *T*.
 - The value of a singleton type can be accessed by calling method *valueOf[T]*.
 
 --
@@ -975,45 +986,19 @@ name: collections
 <br/>
 <br/>
 
-- simplicity
+- <u>simplicity</u>
   - better error messages
   - easier to implement your own collection (but still complex)
 
-- performance
+- <u>performance</u>
 
-- type safety, better type inference
+- <u>type safety</u>, better <u>type inference</u>
 
-- smaller footprint: parallel collections moved to a module of it's own.
+- <u>smaller footprint</u>: parallel collections moved to a module of it's own, etc.
 
-- source code compatibility - as much as possible<br/>
+- <u>source code compatibility</u> - as much as possible<br/>
   Most ordinary code that used the old collections will continue to work as-is.
   But of course ... there are <u>breaking changes</u>.
-
----
-
-## Scala 2.13 Collection Related Links
-<br/>
-
-- Implementing the Scala 2.13 collections<br/>
-  Stefan Zeiger's talk at Scala Days 2019 in Lausanne<br/>
-  https://www.youtube.com/watch?v=L1lxZ1LBuGI
-  
-- The Architecture of Scala 2.13's Collections<br/>
-  https://docs.scala-lang.org/overviews/core/architecture-of-scala-213-collections.html
-
-- Migratin a project to Scala 2.13's Collections<br/>
-  https://docs.scala-lang.org/overviews/core/collections-migration-213.html
-
-- Scala 2.13 Collection Compatibility Library<br/>
-  https://github.com/scala/scala-collection-compat
-
-- Let them be Lazy<br/>
-  Julien Richard Foy's blog on the lazy collection (Views and LazyList)<br/>
-  https://www.scala-lang.org/blog/2017/11/28/view-based-collections.html
-
-- Scala 2.13's Collections Rework<br/>
-  Stefan Zeiger's blog on the collections rework<br/>
-  https://www.scala-lang.org/blog/2017/02/28/collections-rework.html
 
 ---
 
@@ -1049,7 +1034,7 @@ trait List[+A] extends ... {
 
 - *collection.breakOut* in 2.12 inferred the return type of a collection operation from the expected result type.
 
-- It was based on *CanBuildFrom* which gone in 2.13.
+- It was based on *CanBuildFrom* which is gone in 2.13.
 
 - To avoid constructing intermediate collections, use *.view* and *.to(Collection)* instead.
 
@@ -1200,9 +1185,9 @@ val food4 = orderFood(orderArray.toIndexedSeq)    // COMPILES!
 
 - A *mutable.ArraySeq* is also available in the new collections library.
 
-- For Scala 2.12 an *ArraySeq* backport is also available in the *scala-collection-compat* library.
+- For Scala 2.12 an *ArraySeq* backport is provided in the *scala-collection-compat* library.
 
-- *ArraySeq.unsafeWrapArray* wraps an *Array* into an *ArraySeq*.
+- *ArraySeq.unsafeWrapArray* wraps an *Array* in an *ArraySeq*.
 
 <br/>
 ```scala
@@ -1234,11 +1219,10 @@ To make your 2.12 code cross-compilable for 2.12 and 2.13 you have
 
 ---
 
-<br/>
-## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+## Cross-compiling *Seq* &nbsp;(1st option)
 <br/>
 
-### Use *scala.collection.Seq* &nbsp;in method parameters and return types.
+### Explicitly use *scala.collection.Seq* &nbsp;in method parameters and return types.
 
 ```scala
 import scala.collection
@@ -1252,18 +1236,17 @@ def orderFood(order: collection.Seq[Order]): collection.Seq[Food] = ???
 - You don't force your code into immutable semantics.
 - *orderFood* accepts mutable and immutable *Seq*s.
 - mutability / immutability is unspecified for the return type.
-- Caller must call *.toSeq* if she needs an immutable result. (*.toSeq* only copies elements if the result is not yet immutable.)
+- Caller must call *.toSeq* if only she needs an immutable result. (*.toSeq* only copies elements if the result is not yet immutable.)
 
-**Simplest migration strategy!**<br/>
-**No changes at the call site!**
+### Simplest migration strategy!
+### No changes at the call site!
 
 ---
 
-<br/>
-## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+## Cross-compiling *Seq* &nbsp;(2nd option)
 <br/>
 
-### Use *scala.collection.Seq* &nbsp;in method parameters and *scala.collection.immutable.Seq* &nbsp; in return types.
+### Explicitly use *scala.collection.Seq* &nbsp;in parameters and *scala.collection.immutable.Seq* &nbsp; in return types.
 
 ```scala
 import scala.collection
@@ -1279,13 +1262,12 @@ def orderFood(order: collection.Seq[Order]): immutable.Seq[Food] = ???
 - *orderFood* accepts mutable and immutable *Seq*s.
 - immutability is fixed for the return type.
 
-**Still simple migration strategy!**<br/>
-**Mostly no changes at the call site!**
+### Still simple migration strategy!
+### Mostly no changes at the call site!
 
 ---
 
-<br/>
-## Cross-compiling *Seq* &nbsp;for 2.12 and 2.13
+## Cross-compiling *Seq* &nbsp;(3rd option)
 <br/>
 
 ### Use *scala.immutable.collection.Seq* &nbsp;in method parameters and return types.
@@ -1303,8 +1285,8 @@ def orderFood(order: immutable.Seq[Order]): immutable.Seq[Food] = ???
 - *orderFood* accepts only immutable *Seq*s.
 - immutability is also fixed for the return type.
 
-**Possibly many changes at the call site to make the arguments immutable!**<br/>
-**ScalaFix can automate this for a large code base.**
+### Possibly many changes at the call site to make the arguments immutable!
+### Use Scalafix to automate this rewrite for a large code base.
 
 ---
 
@@ -1318,8 +1300,8 @@ def orderFood(order: immutable.Seq[Order]): immutable.Seq[Food] = ???
 
 - *scala.collection.View* has two sub classes: *scala.collection.SeqView* and *scala.collection.MapView*
 
-- Views are lazy. They just record the operations (like *filter*, *map* etc.) do not execute them
-  until a terminal operation (*foreach*, *toSeq*, *toMap* etc.) is invoked.
+- Views are lazy. They record the operations (like *filter*, *map* etc.) and do not execute them
+  before invoking a terminal operation (*foreach*, *toSeq*, *toMap* etc.).
 
 ---
 
@@ -1432,7 +1414,7 @@ val ll: LazyList[(Int, Int)] =
 
 - *mutable.Stack* was reimplemented (and undeprecated), *immutable.Stack* was removed.
 
-- *immutable.SeqMap* (abstract) provides immutable maps that maintain insertion order.
+- *immutable.SeqMap* (abstract) provides immutable maps which maintain insertion order.
 
 - Implementations: *VectorMap* and *TreeSeqMap* (in addition to the already existing *ListMap*)
 
@@ -1585,7 +1567,7 @@ def map[B](f: ((K, V)) => B): Iterable[B]
 
 - Roughly the same holds for the two *Map#flatMap* operations.
 
-- To understand this we have to take a squint into the collections' architecture.
+- To understand this we have to take a glimpse into the collections' architecture.
 
 ---
 
@@ -1672,13 +1654,13 @@ trait Map[K, V] extends MagicBaseTrait[???, ???, ???] {
 ## Selections and Transformations
 <br/>
 
-- **Selection operations** (*filter*, *take*, *drop* etc.) do not change the elements.
+- <u>Selection operations</u> (*filter*, *take*, *drop* etc.) do not change the elements.
 
   - The target type of the operation is exactly the same as the source type,<br/>
     e.g. *filter* on a *List[A]* returns a *List[A]*.
   - We must abstract over the source collection type (*List[A]*) in this case) to generalize this.
 
-- **Transformation operations** (*map*, *flatMap* etc.) do change the elements
+- <u>Transformation operations</u> (*map*, *flatMap* etc.) do change the elements
   and in some cases (*Map* and some others) also the collection type.
 
   - The target type of the operation must be derived
@@ -1703,13 +1685,12 @@ trait Vector[+A] extends Iterable[A] with IterableOps[A, Vector, Vector[A]] {...
 
 --
 
-<br/>
 - *IterableOps* is the MagicBaseTrait we are looking for.
 
 - *IterableOps* is called a template trait.
 
 - *IterableOps* has 3 type parameters, one for the element type (*A*), one for the collection type (*C*)
-  and one for the collection constructor type (*CC*).
+  and one for the collection's type constructor type (*CC*).
 
 - Leaf collection types with one type parameter (*List*, *Vector*) extend *IterableOps*.
 
@@ -1735,7 +1716,7 @@ trait Map[K, V] extends Iterable[(K, V)] with MapOps[K, V, Map, Map[K, V]]
 <br/>
 - *MapOps* extends *IterableOps* and hence inherits all its operations.
 
-- *MapOps* instantiates the collection type constructor *CC* with *Iterable*.
+- *MapOps* instantiates the collection's type constructor *CC* with *Iterable*.
 
 - *MapOps* inherits a *map* operation from *IterableOps* returning *Iterable[B]*.
 
@@ -1768,7 +1749,7 @@ def map[K2, V2](f: ((K, V)) => (K2, V2)): Map[K2, V2]
 --
 
 <br/>
-**“same-result-type” principle**:<br/>
+<u>“same-result-type” principle</u>:<br/>
 &nbsp; &nbsp; &nbsp; Wherever possible a transformation method on a collection<br/>
 &nbsp; &nbsp; &nbsp; yields a collection of the same type.
 
@@ -1794,16 +1775,118 @@ name: migration
 
 ---
 
-# TODO
+<br/>
+<br/>
+## When to Migrate?
+<br/>
+<br/>
 
-todo todo todo todo todo todo todo todo
+- ### when all *libraryDependencies* &nbsp;are availabe for 2.13.
+
+- ### when all transitive dependencies are availabe for 2.13.
+
+---
+
+<br/>
+## Migrate an Application w/o Cross Compilation?
+<br/>
+<br/>
+
+- Upgrade your project to the latest 2.12.x version.
+
+- Upgrade your sbt *libraryDependencies* to versions which are available in both binary versions: 2.12 and 2.13.
+
+- Upgrade the project to 2.13.<br/>
+  You loose backward compatibility to 2.12.<br/>
+  Use all the new features of 2.13.
+
+- Use *scalafix* to automate as much as possible!
+
+- Rewrite the rest by hand.
+
+---
+
+## Migrate a Library with Cross Compilation?
+<br/>
+
+- Upgrade your project to the latest 2.12.x version.
+
+- Upgrade your sbt *libraryDependencies* to versions which are available in both binary versions: 2.12 and 2.13.
+
+- Upgrade the project for cross-compiliation to 2.13, 2.12.
+
+- Keep source compatibility as much as possible w/o using the new features of 2.13.
+
+- Use version specific source folders: *src/main/scala-2.12* and *src/main/scala-2.13*
+
+- Use *scala-collection-compat* library which backports many parts of the collection API to 2.12.
+
+- Use *scalafix* to automate as much as possible!
+
+- Rewrite the rest by hand.
+
+---
+
+<br/>
+## Migration Automation with Scalafix (Setup)
+<br/>
+<br/>
+
+--
+
+Add scalafix plugin
+
+```scala
+// project/plugins.sbt
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.5")
+```
+
+--
+
+Change *build.sbt*
+
+```scala
+// build.sbt
+scalafixDependencies += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.1.2"
+
+// scala-collection-compat needed only for cross compilation
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
+
+scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
+```
+
+---
+
+<br/>
+## Migration Automation with Scalafix (Run)
+<br/>
+<br/>
+
+Run scalafix in sbt shell (for upgrade to 2.13)
+
+```scala
+> ;test:scalafix Collection213Upgrade ;scalafix Collection213Upgrade
+```
+
+Run scalafix in sbt shell (for cross compilation to 2.12/2.13)
+
+```scala
+> ;test:scalafix Collection213CrossCompat ;scalafix Collection213CrossCompat
+```
+
+.footnote[
+Scala 2.13 Collection Compatibility Library and Migration Tool:
+]
+.footnote2[
+https://github.com/scala/scala-collection-compat
+]
 
 ---
 
 class: middle, center
-name: references
+name: resources
 
-# 21. References
+# 21. Resources
 <br/>
 <br/>
 <br/>
@@ -1813,7 +1896,7 @@ name: references
 
 ---
 
-## References
+## Resources
 
 - Code and Slides of this Talk:<br/>
   https://github.com/hermannhueck/new-in-scala213
