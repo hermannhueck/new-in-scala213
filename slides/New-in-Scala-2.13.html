@@ -133,7 +133,15 @@
         float: right;
       }
 
-      .tiny-font {
+      .micro-font {
+        font-size: 0.5em
+      }
+
+      .mini-font {
+        font-size: 0.75em
+      }
+
+      .small-font {
         font-size: 1em
       }
 
@@ -161,7 +169,7 @@
         padding: 8px;
       }
 
-      tr:nth-child(odd) {
+      tr:nth-child(0) {
         background-color: #dddddd;
       }
     </style>
@@ -1787,35 +1795,71 @@ name: migration
 
 ---
 
+#### Scala 2.13 Library support (2019-08-10) <br/>
+
+<table class="micro-font">
+  <tr> <th><u>Library</u></th><th><u>Since</u></th><th><u>Current</u></th> </tr>
+  <tr> <td>scalatest</td><td>3.0.8</td><td>3.0.8</td> </tr>
+  <tr> <td>scalacheck</td><td>1.14.0</td><td>1.14.0</td> </tr>
+  <tr> <td>specs2</td><td>4.6.0</td><td>4.7.0</td> </tr>
+  <tr> <td>akka-*</td><td>2.5.23</td><td>2.5.24</td> </tr>
+  <tr> <td>akka-http</td><td>10.1.8</td><td>10.1.9</td> </tr>
+  <tr> <td>play</td><td>2.7.3</td><td>2.7.4</td> </tr>
+  <tr> <td>slick</td><td>3.3.2</td><td>3.3.2</td> </tr>
+  <tr> <td>lagom</td><td>???</td><td>1.6.0-M4</td> </tr>
+  <tr> <td>kind-projector</td><td>0.10.3</td><td>0.10.3</td> </tr>
+  <tr> <td>shapeless</td><td>2.3.3</td><td>2.3.3</td> </tr>
+  <tr> <td>cats</td><td>???</td><td>2.0.0-RC1</td> </tr>
+  <tr> <td>cats-effect</td><td>???</td><td>2.0.0-RC1</td> </tr>
+  <tr> <td>fs2</td><td>???</td><td>1.1.0-M1</td> </tr>
+  <tr> <td>http4s</td><td>???</td><td>0.21.0-M3</td> </tr>
+  <tr> <td>circe</td><td>???</td><td>0.12.0-RC1</td> </tr>
+  <tr> <td>scalaz</td><td>7.2.28</td><td>7.2.28</td> </tr>
+  <tr> <td>zio</td><td>???</td><td>1.0.0-RC11-1</td> </tr>
+</table>
+
+---
+
 <br/>
-## Migrate an Application w/o Cross Compilation?
+## Before You Migrate ...
 <br/>
 <br/>
 
 - Upgrade your project to the latest 2.12.x version.
 
+- Remove all deprecation warnings. Turn warnings into errors: *scalacOptins += -Xfatal-warnings*
+
+- Scalafix them if there are many. (Turn off *-Xfatal-warnings* while running scalafix. This option let's scalafix fail.)
+
 - Upgrade your sbt *libraryDependencies* to versions which are available in both binary versions: 2.12 and 2.13.
 
-- Upgrade the project to 2.13.<br/>
-  You loose backward compatibility to 2.12.<br/>
-  Use all the new features of 2.13.
+---
 
+<br/>
+## Migrate an Application to 2.13
+<br/>
+
+(This project must not cross compile.)
+
+<br/>
 - Use *scalafix* to automate as much as possible!
 
 - Rewrite the rest by hand.
 
+- Use new features of 2.13.
+
+- You loose backward compatibility to 2.12.
+
 ---
 
-## Migrate a Library with Cross Compilation?
+<br/>
+## Migrate a Library to a Cross Compatible Version
 <br/>
 
-- Upgrade your project to the latest 2.12.x version.
+(This project must cross compile.)
 
-- Upgrade your sbt *libraryDependencies* to versions which are available in both binary versions: 2.12 and 2.13.
-
-- Upgrade the project for cross-compiliation to 2.13, 2.12.
-
-- Keep source compatibility as much as possible w/o using the new features of 2.13.
+<br/>
+- Keep source compatibility as much as possible without using the new features of 2.13.
 
 - Use version specific source folders: *src/main/scala-2.12* and *src/main/scala-2.13*
 
@@ -1852,6 +1896,7 @@ scalafixDependencies += "org.scala-lang.modules" %% "scala-collection-migrations
 // scala-collection-compat needed only for cross compilation
 libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
 
+scalacOptions -= "-Xfatal-warnings" // let's scalafix fail
 scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 ```
 
