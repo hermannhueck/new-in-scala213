@@ -2,9 +2,17 @@ package feature.collections
 
 import java.io.{BufferedReader, FileReader}
 
+import scala.util.chaining._
 import scala.util.Using
 
 object Unfold213 extends App {
+
+  println("\n========== List.unfold 2.13")
+
+  List.unfold(10) {
+    case 0 => None
+    case s => Some(s*s -> (s-1))
+  } tap println
 
   println("\n========== Iterator.unfold 2.13")
 

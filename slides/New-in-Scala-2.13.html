@@ -1518,7 +1518,10 @@ val doubledAndSquared =
 
 ---
 
+<br/>
 ## New *.unfold* &nbsp;method
+<br/>
+<br/>
 
 - This allows constructing a collection or iterator from an initial element
   and a repeated *Option*-returning operation, terminating on *None*.
@@ -1526,6 +1529,22 @@ val doubledAndSquared =
 - This was added to collection companion objects and to *Iterator*.
 
 --
+
+<br/>
+```scala
+List.unfold(10) {
+  case 0 => None
+  case s => Some(s*s -> (s-1))
+} tap println
+//=> List(100, 81, 64, 49, 36, 25, 16, 9, 4, 1)
+```
+
+---
+
+<br/>
+## Read Lines with *Iterator.unfold*
+<br/>
+<br/>
 
 ```scala
 def bufferedReader(fileName: String) =
