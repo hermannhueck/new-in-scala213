@@ -1,4 +1,4 @@
-package feature.stdlib;
+package feature.stdlib
 
 import scala.util.chaining._
 
@@ -11,7 +11,7 @@ object NamedProductElements213 extends App {
   case object Female extends Gender
 
   case class Person(name: String, age: Int, gender: Gender, email: String) {
-    def tupled: (String, Int, Gender, String) = (name, age, gender, email)
+    def tupled: (String, Int, Gender, String) = Person.unapply(this).get
   }
 
   val johndoe = Person("John Doe", 42, Male, "john@doe.com")
