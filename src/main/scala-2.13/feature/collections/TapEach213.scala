@@ -1,8 +1,12 @@
 package feature.collections
 
+import util._
+
 object TapEach213 extends App {
 
-  println("\n========== Coll#tapEach 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Coll#tapEach 2.13")
 
   val doubledAndSquared =
     List(1, 2, 3)
@@ -12,5 +16,5 @@ object TapEach213 extends App {
       .map(x => x * x)
       .tapEach(x => println(s"squared: $x"))
 
-  println("==========\n")
+  prtLine()
 }

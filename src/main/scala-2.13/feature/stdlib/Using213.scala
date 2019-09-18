@@ -5,9 +5,13 @@ import java.io.{BufferedReader, FileReader}
 import scala.util.{Failure, Success, Try, Using}
 import scala.util.chaining._
 
+import util._
+
 object Using213 extends App {
 
-  println("\n========== Using 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Using 2.13")
 
   def bufferedReader(fileName: String): BufferedReader =
     new BufferedReader(new FileReader(fileName))
@@ -61,5 +65,5 @@ object Using213 extends App {
     _ foreach println
   }
 
-  println("==========\n")
+  prtLine()
 }

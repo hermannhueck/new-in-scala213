@@ -4,6 +4,8 @@ import scala.util.Try
 
 import scala.language.reflectiveCalls
 
+import util._
+
 object Using {
 
   def apply[A, R <: { def close(): Unit }](resrc: R)(use: R => A): Try[A] =

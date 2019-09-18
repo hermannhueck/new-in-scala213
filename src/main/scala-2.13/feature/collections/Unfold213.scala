@@ -5,16 +5,20 @@ import java.io.{BufferedReader, FileReader}
 import scala.util.chaining._
 import scala.util.Using
 
+import util._
+
 object Unfold213 extends App {
 
-  println("\n========== List.unfold 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("List.unfold 2.13")
 
   List.unfold(10) {
     case 0 => None
     case s => Some(s * s -> (s - 1))
   } tap println
 
-  println("\n========== Iterator.unfold 2.13")
+  prtSubTitle("Iterator.unfold 2.13")
 
   def bufferedReader(fileName: String) =
     new BufferedReader(new FileReader(fileName))
@@ -37,5 +41,5 @@ object Unfold213 extends App {
 
   lines foreach println
 
-  println("==========\n")
+  prtLine()
 }

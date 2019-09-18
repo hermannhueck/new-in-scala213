@@ -5,9 +5,13 @@ import scala.concurrent.duration._
 
 import compat213.chaining._
 
+import util._
+
 object Future212 extends App {
 
-  println("\n========== Future 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Future 2.12")
 
   implicit lazy val ec: ExecutionContext = ExecutionContext.global
 
@@ -45,5 +49,5 @@ object Future212 extends App {
 
   Await.result(f3, 3.seconds) tap println
 
-  println("==========\n")
+  prtLine()
 }

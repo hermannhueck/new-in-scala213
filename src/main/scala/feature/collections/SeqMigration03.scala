@@ -4,9 +4,13 @@ import scala.collection.compat.immutable.ArraySeq
 import scala.collection.immutable
 import scala.collection.mutable.ArrayBuffer
 
+import util._
+
 object SeqMigration03 extends App {
 
-  println("\n========== SeqMigration Strategy 03")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("SeqMigration Strategy 03")
   trait Order
   trait Food
 
@@ -25,5 +29,5 @@ object SeqMigration03 extends App {
 
   val food5 = orderFood(ArraySeq.unsafeWrapArray(Array(new Order {})))
 
-  println("==========\n")
+  prtLine()
 }

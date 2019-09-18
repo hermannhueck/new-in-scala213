@@ -2,9 +2,13 @@ package feature.stdlib
 
 import scala.util.chaining._
 
+import util._
+
 object NamedProductElements213 extends App {
 
-  println("\n========== Named Product Elements 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Named Product Elements 2.13")
 
   sealed trait Gender extends Product with Serializable
   case object Male    extends Gender
@@ -57,5 +61,5 @@ object NamedProductElements213 extends App {
   johndoe.tupled.toJsonString tap println
   //{ { "_1": John Doe }, { "_2": 42 }, { "_3": Male }, { "_4": john@doe.com } }
 
-  println("==========\n")
+  prtLine()
 }

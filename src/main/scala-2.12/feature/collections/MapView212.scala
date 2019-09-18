@@ -2,9 +2,13 @@ package feature.collections
 
 import compat213.chaining._
 
+import util._
+
 object MapView212 extends App {
 
-  println("\n========== MapView 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("MapView 2.12")
 
   val kvs: Map[String, Int] = Map("one" -> 1, "two" -> 2, "three" -> 3) tap println
 
@@ -21,5 +25,5 @@ object MapView212 extends App {
   // Map#filterKeys returns Map in 2.12
   val keysFiltered: Map[Int, String] = kvsFlipped.filterKeys(_ % 2 != 0) tap println
 
-  println("==========\n")
+  prtLine()
 }

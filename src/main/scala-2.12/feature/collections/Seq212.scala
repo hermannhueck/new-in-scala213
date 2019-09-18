@@ -6,9 +6,13 @@ import scala.collection.mutable.ArrayBuffer
 
 import compat213.chaining._
 
+import util._
+
 object Seq212 extends App {
 
-  println("\n========== Seq 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Seq 2.12")
 
   // type Seq[+A] = scala.collection.Seq[A]
   // Seq is not immutable
@@ -45,5 +49,5 @@ object Seq212 extends App {
   val food5 = orderFood3(ArraySeq.unsafeWrapArray(Array(new Order {})): _*)
   val food6 = orderFood3(Array(new Order                          {}).toSeq: _*)
 
-  println("==========\n")
+  prtLine()
 }

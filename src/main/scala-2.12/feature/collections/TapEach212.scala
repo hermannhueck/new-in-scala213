@@ -1,8 +1,12 @@
 package feature.collections
 
+import util._
+
 object TapEach212 extends App {
 
-  println("\n========== Coll#tapEach 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Coll#tapEach 2.12")
 
   implicit class SeqOps[A](private val seq: Seq[A]) {
 
@@ -42,5 +46,5 @@ object TapEach212 extends App {
     .map(x => x * x)
     .tapEach(x => println(s"squared: $x"))
 
-  println("==========\n")
+  prtLine()
 }

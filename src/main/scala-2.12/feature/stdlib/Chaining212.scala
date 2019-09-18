@@ -1,8 +1,12 @@
 package feature.stdlib
 
+import util._
+
 object Chaining212 extends App {
 
-  println("\n========== Chaining 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Chaining 2.12")
 
   {
     val x: Int = 5
@@ -34,5 +38,5 @@ object Chaining212 extends App {
     doAll(1 - 2 - 3) tap println
   }
 
-  println("==========\n")
+  prtLine()
 }

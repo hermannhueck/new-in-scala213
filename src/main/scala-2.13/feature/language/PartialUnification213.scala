@@ -1,5 +1,6 @@
 package feature.language
 
+// import no longer unnecessary since Scala 2.13.1
 import scala.language.higherKinds
 
 /*
@@ -9,9 +10,13 @@ import scala.language.higherKinds
   https://github.com/scala/scala/pull/5102
   https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
  */
+import util._
+
 object PartialUnification213 extends App {
 
-  println("\n========== Partial Unification 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Partial Unification 2.13")
 
   println("----- Scala 2.13: partial-unification is already enabled ---")
   import feature.stdlib.Using213._
@@ -27,5 +32,5 @@ object PartialUnification213 extends App {
   val intToInt: Function1[Int, Int] = x => x * 2
   foo(intToInt)
 
-  println("==========\n")
+  prtLine()
 }

@@ -2,9 +2,13 @@ package feature.collections
 
 import scala.util.chaining._
 
+import util._
+
 object Breakout213 extends App {
 
-  println("\n========== Breakout 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Breakout 2.13")
 
   // example taken from
   // https://stackoverflow.com/questions/1715681/scala-2-8-breakout
@@ -30,5 +34,5 @@ object Breakout213 extends App {
   // The return type is implicitly chosen by the compiler to best match the expected type.
   // Depending on how you declare the receiving variable, you get different results.
 
-  println("==========\n")
+  prtLine()
 }

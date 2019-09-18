@@ -4,6 +4,8 @@ trait JsonEncoder[A] {
   def encode(a: A): Json
 }
 
+import util._
+
 object JsonEncoder {
 
   def apply[A](implicit encoder: JsonEncoder[A]): JsonEncoder[A] = encoder

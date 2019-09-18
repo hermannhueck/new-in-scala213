@@ -4,9 +4,13 @@ package feature.language
   see:
   https://docs.scala-lang.org/sips/byname-implicits.html
  */
+import util._
+
 object ByNameImplicits213 extends App {
 
-  println("\n========== By Name Implicit Parameters 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("By Name Implicit Parameters 2.13")
 
   trait Foo {
     def next: Foo
@@ -22,5 +26,5 @@ object ByNameImplicits213 extends App {
   val foo = implicitly[Foo]
   assert(foo eq foo.next)
 
-  println("==========\n")
+  prtLine()
 }

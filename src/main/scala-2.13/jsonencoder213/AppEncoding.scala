@@ -3,7 +3,11 @@ package jsonencoder213
 import scala.util.chaining._
 import util._
 
+import util._
+
 object AppEncoding extends App {
+
+  prtSubTitleObjectName(this)
 
   import JsonEncoder.ops._
 

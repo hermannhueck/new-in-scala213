@@ -2,9 +2,13 @@ package feature.language;
 
 import scala.util.chaining._
 
+import util._
+
 object UnderscoresInNumberLiterals213 extends App {
 
-  println("\n========== Underscores in Number Literals 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Underscores in Number Literals 2.13")
 
   val int0: Int = 1000000 tap println
   val int1: Int = 1_000_000 tap println
@@ -15,5 +19,5 @@ object UnderscoresInNumberLiterals213 extends App {
   val float: Float   = 1_000.99f tap println
   val double: Double = 1_000_000.999_999 tap println
 
-  println("==========\n")
+  prtLine()
 }

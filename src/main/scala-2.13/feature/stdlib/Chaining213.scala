@@ -1,8 +1,12 @@
 package feature.stdlib;
 
+import util._
+
 object Chaining213 extends App {
 
-  println("\n========== Chaining 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Chaining 2.13")
 
   import scala.util.chaining._
 
@@ -18,5 +22,5 @@ object Chaining213 extends App {
   val doAll = times6 andThen scala.math.abs
   doAll(1 - 2 - 3) tap println
 
-  println("==========\n")
+  prtLine()
 }

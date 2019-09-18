@@ -2,9 +2,13 @@ package feature.collections
 
 import scala.util.chaining._
 
+import util._
+
 object LengthIs213 extends App {
 
-  println("\n========== Coll#lengthIs 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Coll#lengthIs 2.13")
 
   val xs = List.fill(5000)(scala.util.Random.nextInt)
 
@@ -14,5 +18,5 @@ object LengthIs213 extends App {
     s"The list has ${xs.length} elements." tap println
   }
 
-  println("==========\n")
+  prtLine()
 }

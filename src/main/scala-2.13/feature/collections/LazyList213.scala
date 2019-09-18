@@ -2,9 +2,13 @@ package feature.collections
 
 import scala.util.chaining._
 
+import util._
+
 object LazyList213 extends App {
 
-  println("\n========== Stream/LazyList 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Stream/LazyList 2.13")
 
   // Stream is lazy in it's tail, but eager in it's head
   // LazyList is lazy in it's head and tail
@@ -27,5 +31,5 @@ object LazyList213 extends App {
 
   ll.to(List) tap println
 
-  println("==========\n")
+  prtLine()
 }

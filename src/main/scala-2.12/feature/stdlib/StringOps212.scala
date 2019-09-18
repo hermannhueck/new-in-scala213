@@ -3,9 +3,13 @@ package feature.stdlib
 import compat213.chaining._
 import compat213.string._
 
+import util._
+
 object StringOps212 extends App {
 
-  println("\n========== StringOps 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("StringOps 2.12")
 
   "----- String#toIntOption" tap println
   val i1    = "42".toInt tap println
@@ -23,5 +27,5 @@ object StringOps212 extends App {
   val bOpt2 = "false".toBooleanOption tap println
   val bOpt3 = "no".toBooleanOption tap println
 
-  println("==========\n")
+  prtLine()
 }

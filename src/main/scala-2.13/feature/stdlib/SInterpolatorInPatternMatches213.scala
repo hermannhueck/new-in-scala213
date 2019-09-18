@@ -2,9 +2,13 @@ package feature.stdlib;
 
 import scala.util.chaining._
 
+import util._
+
 object SInterpolatorInPatternMatches213 extends App {
 
-  println("\n========== s-Interpolator in Pattern Matches 2.13")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("s-Interpolator in Pattern Matches 2.13")
 
   val dateString = "11-June-2019" tap println
 
@@ -14,5 +18,5 @@ object SInterpolatorInPatternMatches213 extends App {
   month tap println
   day tap println
 
-  println("==========\n")
+  prtLine()
 }

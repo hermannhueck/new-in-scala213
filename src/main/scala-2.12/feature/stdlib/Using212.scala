@@ -7,9 +7,13 @@ import scala.util.{Failure, Success, Try}
 import compat213.chaining._
 import compat213.Using
 
+import util._
+
 object Using212 extends App {
 
-  println("\n========== Using 2.12")
+  prtSubTitleObjectName(this)
+
+  prtSubTitle("Using 2.12")
 
   def bufferedReader(fileName: String) =
     new BufferedReader(new FileReader(fileName))
@@ -74,5 +78,5 @@ object Using212 extends App {
     _ foreach println
   }
 
-  println("==========\n")
+  prtLine()
 }
