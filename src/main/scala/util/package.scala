@@ -35,10 +35,10 @@ package object util {
       trailing: String = "",
       fill: String = "\u2500"
   ): String = {
-    val frontPad = fill * 10
+    val frontPad    = fill * 10
     val startLength = (10 + text.length() + 2)
-    val endLength = if (startLength > width) 0 else width - startLength
-    val endPad = fill * endLength
+    val endLength   = if (startLength > width) 0 else width - startLength
+    val endPad      = fill * endLength
     s"$leading$frontPad $text $endPad$trailing"
   }
 

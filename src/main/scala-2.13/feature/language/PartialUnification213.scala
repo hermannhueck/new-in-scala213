@@ -15,7 +15,8 @@ object PartialUnification213 extends App {
 
   println("----- Scala 2.13: partial-unification is already enabled ---")
   import feature.stdlib.Using213._
-  lines("src/main/scala-2.13/feature/language/PartialUnification213.scala").slice(18, 28) foreach println
+  lines("src/main/scala-2.13/feature/language/PartialUnification213.scala")
+    .slice(18, 28) foreach println
 
   def foo[F[_], A](fa: F[A]): String =
     fa.toString

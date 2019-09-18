@@ -1,6 +1,4 @@
-package feature.stdlib
-
-;
+package feature.stdlib;
 
 import java.io.{BufferedReader, FileReader}
 
@@ -18,12 +16,14 @@ object Using213 extends App {
     Iterator.unfold(())(_ => Option(reader.readLine()).map(_ -> ())).toList
 
   def tryLines(fileName: String): Try[Seq[String]] =
-    Using(bufferedReader(fileName)) { reader => readLines(reader) }
+    Using(bufferedReader(fileName)) { reader =>
+      readLines(reader)
+    }
 
   def catFile(fileName: String): Unit =
     tryLines(fileName) match {
       case Failure(exception) => exception.toString tap println
-      case Success(lines) => lines foreach println
+      case Success(lines)     => lines foreach println
     }
 
   catFile("README.md")

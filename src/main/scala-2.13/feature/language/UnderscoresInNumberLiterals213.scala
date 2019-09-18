@@ -11,8 +11,8 @@ object UnderscoresInNumberLiterals213 extends App {
   val int2: Int = 1_0_0_0_0_0_0 tap println
   // val int3: Int = 1_0_0_0_0_0_0_ tap println // compile error: trailing separator is not allowed
 
-  val long: Long = 1_000_000_000L tap println
-  val float: Float = 1_000.99f tap println
+  val long: Long     = 1_000_000_000L tap println
+  val float: Float   = 1_000.99f tap println
   val double: Double = 1_000_000.999_999 tap println
 
   println("==========\n")

@@ -11,7 +11,7 @@ object Unfold213 extends App {
 
   List.unfold(10) {
     case 0 => None
-    case s => Some(s*s -> (s-1))
+    case s => Some(s * s -> (s - 1))
   } tap println
 
   println("\n========== Iterator.unfold 2.13")
@@ -25,7 +25,7 @@ object Unfold213 extends App {
   def readLines_dissected(reader: BufferedReader): List[String] = {
     val initialState: Unit = ()
     val iterator: Iterator[String] = Iterator.unfold(initialState) { _ =>
-      val maybeLine: Option[String] = Option(reader.readLine())
+      val maybeLine: Option[String]              = Option(reader.readLine())
       val maybeLineState: Option[(String, Unit)] = maybeLine.map(_ -> ())
       maybeLineState
     }

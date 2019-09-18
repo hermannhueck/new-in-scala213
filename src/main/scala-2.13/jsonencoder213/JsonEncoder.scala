@@ -13,12 +13,12 @@ object JsonEncoder {
       def encode(a: A): Json = f(a)
     }
 
-  implicit val stringEncoder: JsonEncoder[String] = createEncoder(str => JsonString(str))
-  implicit val doubleEncoder: JsonEncoder[Double] = createEncoder(num => JsonNumber(num))
-  implicit val floatEncoder: JsonEncoder[Float] = createEncoder(num => JsonNumber(num))
-  implicit val intEncoder: JsonEncoder[Int] = createEncoder(num => JsonNumber(num))
-  implicit val longEncoder: JsonEncoder[Long] = createEncoder(num => JsonNumber(num))
-  implicit val booleanEncoder: JsonEncoder[Boolean] = createEncoder(bool => JsonBoolean(bool))
+  implicit val stringEncoder: JsonEncoder[String]   = createEncoder(JsonString(_))
+  implicit val doubleEncoder: JsonEncoder[Double]   = createEncoder(JsonNumber(_))
+  implicit val floatEncoder: JsonEncoder[Float]     = createEncoder(JsonNumber(_))
+  implicit val intEncoder: JsonEncoder[Int]         = createEncoder(JsonNumber(_))
+  implicit val longEncoder: JsonEncoder[Long]       = createEncoder(JsonNumber(_))
+  implicit val booleanEncoder: JsonEncoder[Boolean] = createEncoder(JsonBoolean(_))
 
   implicit def optionEncoder[A](implicit encoder: JsonEncoder[A]): JsonEncoder[Option[A]] =
     createEncoder(opt => opt.map(encoder.encode).getOrElse(JsonNull))
@@ -57,7 +57,7 @@ object JsonEncoder {
 
     val fields: List[(String, Json)] = (0 until p.productArity).toList map { index =>
       val name: String = p.productElementName(index)
-      val value: Any = p.productElement(index)
+      val value: Any   = p.productElement(index)
       // (name, value) tap println
       val jsonValue = value match {
         case b: Boolean => b.toJson

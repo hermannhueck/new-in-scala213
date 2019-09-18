@@ -9,7 +9,8 @@ object LazyList212 extends App {
   // Stream is lazy in it's tail, but eager in it's head
 
   val stream: Stream[(Int, Int)] =
-    Stream.continually(42)
+    Stream
+      .continually(42)
       .take(10)
       .zipWithIndex
       .map { case (value, index) => (index, value) } tap println
