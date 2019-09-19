@@ -36,4 +36,4 @@ lazy val root = (project in file(".")).settings(
   }
 )
 
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+// addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
