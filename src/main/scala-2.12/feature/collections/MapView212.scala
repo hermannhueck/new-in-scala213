@@ -12,8 +12,8 @@ object MapView212 extends App {
 
   val kvs: Map[String, Int] = Map("one" -> 1, "two" -> 2, "three" -> 3) tap println
 
-  val kvsFlipped
-      : Map[Int, String] = kvs.toList.map { case (fst, snd) => (snd, fst) }.toMap tap println
+  def flip[A, B](t: (A, B)): (B, A) = t match { case (fst, snd) => (snd, fst) }
+  val kvsFlipped: Map[Int, String]  = kvs.toList.map(flip).toMap tap println
 
   "\n>>> Map#mapValues returns Map in 2.12:" tap println
   // def mapValues[W](f: (V) ⇒ W): Map[K, W]

@@ -14,8 +14,8 @@ object MapView213 extends App {
 
   val kvs = Map("one" -> 1, "two" -> 2, "three" -> 3) tap println
 
-  val kvsFlipped
-      : Map[Int, String] = kvs.toList.map { case (fst, snd) => (snd, fst) }.toMap tap println
+  def flip[A, B](t: (A, B)): (B, A) = t match { case (fst, snd) => (snd, fst) }
+  val kvsFlipped: Map[Int, String]  = kvs.toList.map(flip).toMap tap println
 
   "\n>>> Map#mapValues returns MapView instead of Map and is deprecated in 2.13:" tap println
   // Map:  def mapValues[W](f: (V) => W): MapView[K, W]
