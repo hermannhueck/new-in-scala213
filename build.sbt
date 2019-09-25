@@ -4,6 +4,9 @@ val scala212               = "2.12.10"
 val scala213               = "2.13.1"
 val supportedScalaVersions = List(scala212, scala213)
 
+val scalaTest  = "org.scalatest"  %% "scalatest"  % "3.0.8"
+val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.14.1"
+
 inThisBuild(
   Seq(
     scalaVersion := scala213,
@@ -17,6 +20,10 @@ inThisBuild(
       "-unchecked",   // warn about unchecked type parameters
       "-feature",     // warn about misused language features
       "-Xlint"        // enable handy linter warnings
+    ),
+    libraryDependencies ++= Seq(
+      scalaTest  % Test,
+      scalaCheck % Test
     )
   )
 )
