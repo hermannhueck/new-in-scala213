@@ -1,7 +1,6 @@
 package feature.language
 
-// import no longer unnecessary since Scala 2.13.1
-import scala.language.higherKinds
+// import scala.language.higherKinds // redundant since 2.13.1
 
 /*
   Scala 2.13: partial-unification is already enabled

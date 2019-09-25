@@ -530,7 +530,7 @@ res3: scala.util.Either[String,Int] = Left(some error)
 
 <br/>
 <br/>
-## How to backport to 2.12:<br/>*Right.withLeft* &nbsp;and *Left.withRight*
+## Backport to 2.12:<br/>*Right.withLeft* &nbsp;and *Left.withRight*
 <br/>
 
 ```scala
@@ -553,13 +553,12 @@ package object either {
 ---
 
 <br/>
-<br/>
-## *Either.flatten*
+## *Either#flatten*
 <br/>
 
 - available since 2.13
 
-- in 2.12 you can flatten a nested *Either* with *flatMap*.
+- *Either#flatten* is equivalent to *Either#flatMap(x => x)* &nbsp; (usable in 2.12)
 
 --
 
@@ -568,8 +567,14 @@ package object either {
 ### Scala 2.12
 
 ```scala
-val nestedEither = Right(Right(5))
-nestedEither.flatMap(x => x)
+val rr = Right(Right(42))
+rr.flatMap(x => x)
+
+val rl = Right(Left("Error RL"))
+rl.flatMap(x => x)
+
+val l = Left("Error L")
+l.flatMap(x => x)
 ```
 ]
 
@@ -578,10 +583,41 @@ nestedEither.flatMap(x => x)
 ### Scala 2.13
 
 ```scala
-val nestedEither = Right(Right(5))
-nestedEither.flatten
+val rr = Right(Right(42))
+rr.flatten
+
+val rl = Right(Left("Error RL"))
+rl.flatten
+
+val l = Left("Error L")
+l.flatten
 ```
 ]
+
+.footnote2[
+  [scaladoc: Either](https://www.scala-lang.org/api/current/scala/util/Either.html)
+]
+
+---
+
+<br/>
+<br/>
+## Backport to 2.12: &nbsp; *Either#flatten*
+<br/>
+<br/>
+
+```scala
+package compat213
+
+package object either {
+
+  implicit class EitherOps[+L, +R](private val either: Either[L, R]) {
+
+    def flatten[L1 >: L, RR](implicit ev: R <:< Either[L1, RR]): Either[L1, RR] =
+      either.flatMap(x => x)
+  }
+}
+```
 
 ---
 
@@ -981,7 +1017,7 @@ val double: Double = 1_000_000.999_999
 
 <br/>
 ```scala
-import scala.language.higherKinds
+// import scala.language.higherKinds // redundant since 2.13.1
 
 def foo[F[_], A](fa: F[A]): String =
   fa.toString

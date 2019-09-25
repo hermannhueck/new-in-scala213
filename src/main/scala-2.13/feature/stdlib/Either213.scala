@@ -13,19 +13,19 @@ object Either213 extends App {
   "Either#flatten is available in 2.13" tap println
   println
 
-  val rightRight = Right(Right(5))
-  rightRight tap (x => println(s"rightRight: $x"))
-  rightRight.flatten tap (x => println(s"rightRight flattened: $x"))
+  val rr = Right(Right(42))
+  rr tap (x => println(s"rr: $x"))
+  rr.flatten tap (x => println(s"rr flattened: $x"))
   println
 
-  val rightLeft = Right(Left("Error"))
-  rightLeft tap (x => println(s"rightLeft: $x"))
-  rightLeft.flatten tap (x => println(s"rightLeft flattened: $x"))
+  val rl = Right(Left("ErrorRL"))
+  rl tap (x => println(s"rl: $x"))
+  rl.flatten tap (x => println(s"rl flattened: $x"))
   println
 
-  val left = Left("Error")
-  left tap (x => println(s"left: $x"))
-  left.flatten tap (x => println(s"left flattened: $x"))
+  val l = Left("ErrorL")
+  l tap (x => println(s"l: $x"))
+  l.flatten tap (x => println(s"l flattened: $x"))
   println
 
   prtLine()

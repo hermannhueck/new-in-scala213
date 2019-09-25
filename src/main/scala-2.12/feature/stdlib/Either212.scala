@@ -14,19 +14,19 @@ object Either212 extends App {
   "Either#flatten is available in 2.13, not in 2.12, but provided by compat213.either" tap println
   println
 
-  val rightRight = Right(Right(5))
-  println(s"rightRight: $rightRight")
-  println(s"rightRight flattened: ${rightRight.flatten}")
+  val rr = Right(Right(42))
+  println(s"rr: $rr")
+  println(s"rr flattened: ${rr.flatten}")
   println
 
-  val rightLeft = Right(Left("Error"))
-  println(s"rightLeft: $rightLeft")
-  println(s"rightLeft flattened: ${rightLeft.flatten}")
+  val rl = Right(Left("Error RL"))
+  println(s"rl: $rl")
+  println(s"rl flattened: ${rl.flatten}")
   println
 
-  val left = Left("Error")
-  println(s"left: $left")
-  println(s"left flattened: ${left.flatten}")
+  val l = Left("Error L")
+  println(s"l: $l")
+  println(s"l flattened: ${l.flatten}")
   println
 
   prtLine()
