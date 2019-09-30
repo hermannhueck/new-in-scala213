@@ -4,8 +4,6 @@ trait JsonEncoder[A] {
   def encode(a: A): Json
 }
 
-import util._
-
 object JsonEncoder {
 
   def apply[A](implicit encoder: JsonEncoder[A]): JsonEncoder[A] = encoder
@@ -42,13 +40,13 @@ object JsonEncoder {
 
   object ops {
 
-    implicit class JsonOps1[A](private val a: A) {
+    implicit class JsonOps1[A](private val a: A) extends AnyVal {
       def toJson(implicit encoder: JsonEncoder[A]) = encoder.encode(a)
     }
-    implicit class JsonOps2[A](private val optA: Option[A]) {
+    implicit class JsonOps2[A](private val optA: Option[A]) extends AnyVal {
       def toJson(implicit encoder: JsonEncoder[Option[A]]) = encoder.encode(optA)
     }
-    implicit class JsonOps3(private val p: Product) {
+    implicit class JsonOps3(private val p: Product) extends AnyVal {
       def toJson(implicit encoder: JsonEncoder[Product]) = encoder.encode(p)
     }
   }

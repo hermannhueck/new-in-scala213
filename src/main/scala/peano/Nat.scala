@@ -17,7 +17,7 @@ object Nat {
     go(num)
   }
 
-  implicit class IntOps(private val int: Int) {
+  implicit class IntOps(private val int: Int) extends AnyVal {
     def toNat(): Nat = Nat.toNat(int)
   }
 }

@@ -52,7 +52,7 @@ object NamedProductElements213 extends App {
       }
       .mkString("{ ", ", ", " }")
 
-  implicit class ProductOps(private val product: Product) {
+  implicit class ProductOps(private val product: Product) extends AnyVal {
     def toJsonString: String = productToJson(product)
   }
 

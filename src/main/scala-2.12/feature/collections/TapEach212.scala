@@ -8,30 +8,34 @@ object TapEach212 extends App {
 
   prtSubTitle("Coll#tapEach 2.12")
 
-  implicit class SeqOps[A](private val seq: Seq[A]) {
+  implicit class SeqOps[A](private val seq: Seq[A]) extends AnyVal {
 
     def tapEach(f: A => Unit): Seq[A] = seq.map { a =>
       f(a); a
     }
   }
-  implicit class ListOps[A](private val seq: List[A]) {
+
+  implicit class ListOps[A](private val seq: List[A]) extends AnyVal {
 
     def tapEach(f: A => Unit): List[A] = seq.map { a =>
       f(a); a
     }
   }
-  implicit class VectorOps[A](private val seq: Vector[A]) {
+
+  implicit class VectorOps[A](private val seq: Vector[A]) extends AnyVal {
 
     def tapEach(f: A => Unit): Vector[A] = seq.map { a =>
       f(a); a
     }
   }
-  implicit class SetOps[A](private val seq: Set[A]) {
+
+  implicit class SetOps[A](private val seq: Set[A]) extends AnyVal {
 
     def tapEach(f: A => Unit): Set[A] = seq.map { a =>
       f(a); a
     }
   }
+
   implicit class MapOps[K, V](private val seq: Map[K, V]) {
 
     def tapEach(f: ((K, V)) => Unit): Map[K, V] = seq.map { pair =>
