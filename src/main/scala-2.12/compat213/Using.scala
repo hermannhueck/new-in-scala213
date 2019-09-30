@@ -4,14 +4,14 @@ import scala.util.Try
 
 import scala.language.reflectiveCalls
 
-import util._
-
 object Using {
 
-  def apply[A, R <: { def close(): Unit }](resrc: R)(use: R => A): Try[A] =
+  type Closable = { def close(): Unit }
+
+  def apply[A, R <: Closable](resrc: R)(use: R => A): Try[A] =
     Try(resource(resrc)(use))
 
-  def resource[A, R <: { def close(): Unit }](resrc: R)(use: R => A): A =
+  def resource[A, R <: Closable](resrc: R)(use: R => A): A =
     try {
       use(resrc)
     } finally {
