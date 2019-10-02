@@ -28,19 +28,23 @@ inThisBuild(
   )
 )
 
-lazy val root = (project in file(".")).settings(
-  bloopGenerate in Test := None,
-  libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
-  Compile / scalacOptions ++= {
-    val sv = (Compile / scalaVersion).value
-    if (sv.startsWith("2.13")) {
-      println(s"\n>>>>>          compiling for Scala $sv\n")
-      Seq() // Scala 2.13: partial-unification already enabled
-    } else {
-      println(s"\n>>>>>          compiling for Scala $sv\n")
-      Seq("-Ypartial-unification") // Scala 2.12: enable partial-unification
+lazy val root = (project in file("."))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "build",
+    bloopGenerate in Test := None,
+    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
+    Compile / scalacOptions ++= {
+      val sv = (Compile / scalaVersion).value
+      if (sv.startsWith("2.13")) {
+        println(s"\n>>>>>          compiling for Scala $sv\n")
+        Seq() // Scala 2.13: partial-unification already enabled
+      } else {
+        println(s"\n>>>>>          compiling for Scala $sv\n")
+        Seq("-Ypartial-unification") // Scala 2.12: enable partial-unification
+      }
     }
-  }
-)
+  )
 
 // addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
