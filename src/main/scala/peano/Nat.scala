@@ -18,7 +18,7 @@ object Nat {
   }
 
   implicit class IntOps(private val int: Int) extends AnyVal {
-    def toNat(): Nat = Nat.toNat(int)
+    @inline def toNat(): Nat = Nat.toNat(int)
   }
 }
 

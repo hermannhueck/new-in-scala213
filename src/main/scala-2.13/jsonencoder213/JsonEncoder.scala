@@ -41,13 +41,13 @@ object JsonEncoder {
   object ops {
 
     implicit class JsonOps1[A](private val a: A) extends AnyVal {
-      def toJson(implicit encoder: JsonEncoder[A]) = encoder.encode(a)
+      @inline def toJson(implicit encoder: JsonEncoder[A]) = encoder.encode(a)
     }
     implicit class JsonOps2[A](private val optA: Option[A]) extends AnyVal {
-      def toJson(implicit encoder: JsonEncoder[Option[A]]) = encoder.encode(optA)
+      @inline def toJson(implicit encoder: JsonEncoder[Option[A]]) = encoder.encode(optA)
     }
     implicit class JsonOps3(private val p: Product) extends AnyVal {
-      def toJson(implicit encoder: JsonEncoder[Product]) = encoder.encode(p)
+      @inline def toJson(implicit encoder: JsonEncoder[Product]) = encoder.encode(p)
     }
   }
 
