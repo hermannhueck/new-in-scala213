@@ -6,7 +6,7 @@ import util._
 
 object NamedProductElements213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Named Product Elements 2.13")
 

@@ -6,7 +6,7 @@ import util._
 
 object SInterpolatorInPatternMatches213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("s-Interpolator in Pattern Matches 2.13")
 

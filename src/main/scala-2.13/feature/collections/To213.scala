@@ -6,7 +6,7 @@ import util._
 
 object To213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Coll#to 2.13")
 

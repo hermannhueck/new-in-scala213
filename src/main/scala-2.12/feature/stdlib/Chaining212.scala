@@ -4,7 +4,7 @@ import util._
 
 object Chaining212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Chaining 2.12")
 

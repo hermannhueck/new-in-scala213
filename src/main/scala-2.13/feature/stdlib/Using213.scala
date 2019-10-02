@@ -9,7 +9,7 @@ import util._
 
 object Using213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Using 2.13")
 

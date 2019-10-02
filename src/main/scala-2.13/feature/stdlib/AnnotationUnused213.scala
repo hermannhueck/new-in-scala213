@@ -6,7 +6,7 @@ import util._
 
 object AnnotationUnused213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Annotation @unused 2.13")
 

@@ -10,7 +10,7 @@ import util._
 
 object Seq213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Seq 2.13")
 

@@ -6,7 +6,7 @@ object PeanoNumbers extends App {
 
   import Nat._
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   val zero: Zero.type = Zero
   println(zero)

@@ -6,7 +6,7 @@ import util._
 
 object LiteralTypes213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Literal Types 2.13")
 

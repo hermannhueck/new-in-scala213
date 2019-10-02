@@ -6,7 +6,7 @@ import util._
 
 object StringOps213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("StringOps 2.13")
 

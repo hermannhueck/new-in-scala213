@@ -6,7 +6,7 @@ import util._
 
 object Either213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Either 2.13")
 

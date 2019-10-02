@@ -15,7 +15,7 @@ import util._
 
 object PartialUnification212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Partial Unification 2.12")
 

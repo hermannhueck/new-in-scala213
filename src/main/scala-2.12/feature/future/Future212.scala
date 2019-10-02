@@ -9,7 +9,7 @@ import util._
 
 object Future212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Future 2.12")
 

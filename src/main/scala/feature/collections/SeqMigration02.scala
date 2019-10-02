@@ -8,7 +8,7 @@ import util._
 
 object SeqMigration02 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("SeqMigration Strategy 02")
   trait Order

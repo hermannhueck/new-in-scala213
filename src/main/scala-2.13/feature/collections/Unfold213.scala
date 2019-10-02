@@ -9,7 +9,7 @@ import util._
 
 object Unfold213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("List.unfold 2.13")
 

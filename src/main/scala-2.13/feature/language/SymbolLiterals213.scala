@@ -6,7 +6,7 @@ import util._
 
 object SymbolLiterals213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Symbol Literals deprecated in 2.13")
 

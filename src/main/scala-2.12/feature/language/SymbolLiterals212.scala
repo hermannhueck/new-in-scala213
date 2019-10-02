@@ -6,7 +6,7 @@ import util._
 
 object SymbolLiterals212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Symbol Literals 2.12")
 

@@ -6,7 +6,7 @@ import util._
 
 object UnderscoresInNumberLiterals213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Underscores in Number Literals 2.13")
 

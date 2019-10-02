@@ -6,7 +6,7 @@ import util._
 
 object MapView212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("MapView 2.12")
 

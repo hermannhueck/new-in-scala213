@@ -11,7 +11,7 @@ import util._
 
 object Using212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Using 2.12")
 

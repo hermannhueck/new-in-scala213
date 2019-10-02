@@ -7,7 +7,7 @@ import util._
 
 object AppEncoding extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   import JsonEncoder.ops._
 

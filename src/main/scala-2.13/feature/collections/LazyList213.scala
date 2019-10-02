@@ -6,7 +6,7 @@ import util._
 
 object LazyList213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Stream/LazyList 2.13")
 

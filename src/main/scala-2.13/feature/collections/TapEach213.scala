@@ -4,7 +4,7 @@ import util._
 
 object TapEach213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Coll#tapEach 2.13")
 

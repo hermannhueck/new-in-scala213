@@ -6,7 +6,7 @@ import util._
 
 object Breakout212 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Breakout 2.12")
 

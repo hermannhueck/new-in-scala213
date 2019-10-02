@@ -6,7 +6,7 @@ import util._
 
 object LengthIs213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("Coll#lengthIs 2.13")
 

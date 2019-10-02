@@ -8,7 +8,7 @@ import util._
 
 object ByNameImplicits213 extends App {
 
-  prtSubTitleObjectName(this)
+  prtTitleObjectName(this)
 
   prtSubTitle("By Name Implicit Parameters 2.13")
 

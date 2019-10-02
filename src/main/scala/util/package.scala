@@ -1,5 +1,12 @@
 package object util {
 
+  import build._
+
+  val sbtVersion    = BuildInfo.sbtVersion
+  val scalaVersion  = BuildInfo.scalaVersion
+  val buildInfo     = s"BuildInfo:  sbt.version = $sbtVersion,  scala.version = $scalaVersion"
+  val buildInfoLong = BuildInfo.toString
+
   def prtTitle(
       text: String,
       width: Int = 80,
@@ -16,7 +23,8 @@ package object util {
       trailing: String = "",
       fill: String = "\u2500"
   ): String = {
-    s"${line(width, leading, "", fill)}${subTitle(text.toUpperCase, width, "\n", s"$trailing\n", fill)}"
+    s"${line(width, leading, "", fill)}${subTitle(text.toUpperCase, width, "\n", s"", fill)}" +
+      s"${subTitle(s"$buildInfo", width, "\n", s"$trailing\n", fill)}"
   }
 
   def prtSubTitle(
@@ -69,6 +77,9 @@ package object util {
     val cn = scalaObject.getClass().getName
     cn.substring(0, cn.length() - 1)
   }
+
+  def prtTitleObjectName(scalaObject: java.lang.Object) =
+    prtTitle(objectName(scalaObject))
 
   def prtSubTitleObjectName(scalaObject: java.lang.Object) =
     prtSubTitle(objectName(scalaObject))
