@@ -47,4 +47,7 @@ lazy val root = (project in file("."))
     }
   )
 
-// addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+// https://github.com/typelevel/kind-projector
+addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.0" cross CrossVersion.full)
+// https://github.com/oleg-py/better-monadic-for
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
