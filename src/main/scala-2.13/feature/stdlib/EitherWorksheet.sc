@@ -1,4 +1,3 @@
-
 Right(5)
 Right(5).withLeft[String]
 

@@ -17,6 +17,7 @@ object ByNameImplicits213 extends App {
   }
 
   object Foo {
+
     // wouldn't compile, if rec were a call by value parameter
     // remove the => and try to compile ...
     implicit def foo(implicit rec: => Foo): Foo =
