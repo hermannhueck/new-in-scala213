@@ -2,12 +2,13 @@ package feature.collections
 
 import java.io.{BufferedReader, FileReader}
 
-import scala.util.chaining._
-import scala.util.Using
+import compat213.chaining._
+import compat213.collections._
+import compat213.Using
 
 import util._
 
-object Unfold213 extends App {
+object Unfold212 extends App {
 
   prtTitleObjectName(this)
 
@@ -16,15 +17,15 @@ object Unfold213 extends App {
     case s => Some(((s * s), (s - 1)))
   }
 
-  prtSubTitle("LazyList.unfold 2.12")
+  prtSubTitle("Stream.unfold 2.12")
 
-  LazyList.unfold(10)(unfoldFunction).toList tap println
+  Stream.unfold(10)(unfoldFunction).toList tap println
 
-  prtSubTitle("List.unfold 2.13")
+  prtSubTitle("List.unfold 2.12")
 
-  List.unfold(10)(unfoldFunction).toList tap println
+  List.unfold(10)(unfoldFunction) tap println
 
-  prtSubTitle("Iterator.unfold 2.13")
+  prtSubTitle("Iterator.unfold 2.12")
 
   def bufferedReader(fileName: String) =
     new BufferedReader(new FileReader(fileName))
