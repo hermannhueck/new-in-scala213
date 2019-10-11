@@ -2,10 +2,11 @@ package object util {
 
   import build._
 
-  val sbtVersion    = BuildInfo.sbtVersion
-  val scalaVersion  = BuildInfo.scalaVersion
-  val buildInfo     = s"BuildInfo:  sbt.version = $sbtVersion,  scala.version = $scalaVersion"
-  val buildInfoLong = BuildInfo.toString
+  val sbtVersion       = BuildInfo.sbtVersion
+  val scalaVersion     = BuildInfo.scalaVersion
+  val buildInfo        = s"BuildInfo:  sbt.version = $sbtVersion,  scala.version = $scalaVersion"
+  val buildInfoColored = s"${Console.BLUE}$buildInfo${Console.RESET}"
+  val buildInfoLong    = BuildInfo.toString
 
   def prtTitle(
       text: String,
@@ -23,8 +24,9 @@ package object util {
       trailing: String = "",
       fill: String = "\u2500"
   ): String = {
-    s"${line(width, leading, "", fill)}${subTitle(text.toUpperCase, width, "\n", s"", fill)}" +
-      s"${subTitle(s"$buildInfo", width, "\n", s"$trailing\n", fill)}"
+    val textColored = s"${Console.BLUE}$text${Console.RESET}"
+    s"${line(width, leading, "", fill)}${subTitle(textColored, width, "\n", s"", fill)}" +
+      s"${subTitle(s"$buildInfoColored", width, "\n", s"$trailing\n", fill)}"
   }
 
   def prtSubTitle(
@@ -34,7 +36,7 @@ package object util {
       trailing: String = "",
       fill: String = "\u2500"
   ): Unit =
-    println(subTitle(text, width, leading, trailing, fill))
+    println(subTitle(s"${Console.BLUE}$text${Console.RESET}", width, leading, trailing, fill))
 
   def subTitle(
       text: String,
@@ -46,7 +48,7 @@ package object util {
     val frontPad    = fill * 10
     val startLength = (10 + text.length() + 2)
     val endLength   = if (startLength > width) 0 else width - startLength
-    val endPad      = fill * endLength
+    val endPad      = fill * (endLength + 9) // add 9 to adjust color escape chars
     s"$leading$frontPad $text $endPad$trailing"
   }
 
