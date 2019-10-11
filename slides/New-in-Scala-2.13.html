@@ -1638,7 +1638,7 @@ val doubledAndSquared =
 ---
 
 <br/>
-## New *.unfold* &nbsp;method
+## New method *List.unfold* &nbsp;or *Iterator.unfold*
 <br/>
 <br/>
 
@@ -1651,10 +1651,12 @@ val doubledAndSquared =
 
 <br/>
 ```scala
-List.unfold(10) {
+val unfoldFunction: Int => Option[(Int, Int)] = {
   case 0 => None
-  case s => Some(s*s -> (s-1))
-} tap println
+  case s => Some(((s * s), (s - 1)))
+}
+
+List.unfold(10)(unfoldFunction) tap println
 //=> List(100, 81, 64, 49, 36, 25, 16, 9, 4, 1)
 ```
 
@@ -1685,6 +1687,30 @@ val lines: Seq[String] =
   Using.resource(bufferedReader("README.md"))(readLines)
 
 lines foreach println
+```
+
+---
+
+<br/>
+## Backport to 2.12: *List.unfold*
+<br/>
+
+```scala
+def unfoldToStream[A, B](init: A)(f: A => Option[(B, A)]): Stream[B] =
+  f(init)
+    .map {
+      case (b, a) =>
+        b #:: unfoldToStream(a)(f)
+    }
+    .getOrElse(Stream.empty)
+
+def unfoldToList[A, B](init: A)(f: A => Option[(B, A)]): List[B] =
+  unfoldToStream(init)(f).toList
+
+implicit class ListCompanionOps(private val self: List.type) extends AnyVal {
+  @inline def unfold[A, B](init: A)(f: A => Option[(B, A)]): List[B] =
+    unfoldToList(init)(f)
+}
 ```
 
 ---
