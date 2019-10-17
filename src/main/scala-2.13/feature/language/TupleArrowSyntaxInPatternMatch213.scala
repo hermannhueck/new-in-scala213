@@ -1,8 +1,5 @@
 package feature.language
 
-import java.io.{BufferedReader, FileReader}
-
-import scala.util.Using
 import scala.util.chaining._
 
 import util.formatting._
@@ -11,18 +8,12 @@ object TupleArrowSyntaxInPatternMatch213 extends App {
 
   prtTitleObjectName(this)
 
-  lines("build.sbt") flatMap toWords pipe wordCount tap println
+  import feature.stdlib.Using212and213._
+
+  val file = "build.sbt"
+  lines(file) flatMap toWords pipe wordCount tap println
 
   prtLine()
-
-  def bufferedReader(fileName: String): BufferedReader =
-    new BufferedReader(new FileReader(fileName))
-
-  def readLines(reader: BufferedReader): Seq[String] =
-    Iterator.unfold(())(_ => Option(reader.readLine()).map(_ -> ())).toList
-
-  def lines(fileName: String): Seq[String] =
-    Using.resource(bufferedReader(fileName))(readLines)
 
   def toWords(line: String): List[String] =
     line.split("\\W").toList.filter(_.length > 1)
