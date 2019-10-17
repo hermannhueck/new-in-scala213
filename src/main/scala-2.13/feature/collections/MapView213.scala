@@ -4,7 +4,7 @@ import scala.util.chaining._
 
 import scala.collection.MapView
 
-import util._
+import util.formatting._
 
 object MapView213 extends App {
 

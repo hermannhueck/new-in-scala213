@@ -1,9 +1,9 @@
 package jsonencoder213
 
 import scala.util.chaining._
-import util._
+import util.formatting._
 
-import util._
+import util.formatting._
 
 object AppEncoding extends App {
 

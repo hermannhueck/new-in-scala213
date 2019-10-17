@@ -6,7 +6,7 @@ import scala.util.Using
 import scala.util.chaining._
 
 import compat213.collections._
-import util._
+import util.formatting._
 
 object Unfold212 extends App {
 

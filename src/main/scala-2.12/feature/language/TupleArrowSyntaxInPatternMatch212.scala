@@ -5,7 +5,7 @@ import java.io.{BufferedReader, FileReader}
 import scala.util.Using
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 import util.collections._
 
 object TupleArrowSyntaxInPatternMatch212 extends App {

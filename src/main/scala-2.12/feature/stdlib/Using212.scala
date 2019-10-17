@@ -7,7 +7,7 @@ import scala.util.{Failure, Success, Try}
 import scala.util.Using
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object Using212 extends App {
 

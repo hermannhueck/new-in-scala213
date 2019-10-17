@@ -2,7 +2,7 @@ package feature.stdlib
 
 import scala.annotation.unused
 
-import util._
+import util.formatting._
 
 object AnnotationUnused213 extends App {
 

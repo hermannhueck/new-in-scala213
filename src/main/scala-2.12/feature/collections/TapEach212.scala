@@ -1,6 +1,6 @@
 package feature.collections
 
-import util._
+import util.formatting._
 
 object TapEach212 extends App {
 

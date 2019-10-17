@@ -1,6 +1,6 @@
 package feature.stdlib;
 
-import util._
+import util.formatting._
 
 object Chaining213 extends App {
 

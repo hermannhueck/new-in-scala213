@@ -3,7 +3,7 @@ package feature.stdlib
 import scala.util.chaining._
 import compat213.either._
 
-import util._
+import util.formatting._
 
 object Either212 extends App {
 

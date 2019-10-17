@@ -5,7 +5,7 @@ import java.io.{BufferedReader, FileReader}
 import scala.util.chaining._
 import scala.util.Using
 
-import util._
+import util.formatting._
 
 object Unfold213 extends App {
 

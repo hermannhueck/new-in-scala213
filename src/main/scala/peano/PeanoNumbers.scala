@@ -1,6 +1,6 @@
 package peano
 
-import util._
+import util.formatting._
 
 object PeanoNumbers extends App {
 

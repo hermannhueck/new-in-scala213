@@ -3,7 +3,7 @@ package feature.stdlib
 import scala.util.chaining._
 import compat213.string._
 
-import util._
+import util.formatting._
 
 object StringOps212 extends App {
 

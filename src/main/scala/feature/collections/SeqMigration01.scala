@@ -3,7 +3,7 @@ package feature.collections
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.mutable.ArrayBuffer
 
-import util._
+import util.formatting._
 
 object SeqMigration01 extends App {
 

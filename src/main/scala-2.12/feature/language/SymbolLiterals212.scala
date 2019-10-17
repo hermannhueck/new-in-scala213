@@ -2,7 +2,7 @@ package feature.language
 
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object SymbolLiterals212 extends App {
 

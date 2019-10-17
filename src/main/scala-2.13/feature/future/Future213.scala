@@ -4,7 +4,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object Future213 extends App {
 

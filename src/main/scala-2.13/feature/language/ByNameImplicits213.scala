@@ -4,7 +4,7 @@ package feature.language
   see:
   https://docs.scala-lang.org/sips/byname-implicits.html
  */
-import util._
+import util.formatting._
 
 object ByNameImplicits213 extends App {
 

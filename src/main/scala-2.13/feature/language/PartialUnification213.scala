@@ -9,7 +9,7 @@ package feature.language
   https://github.com/scala/scala/pull/5102
   https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
  */
-import util._
+import util.formatting._
 
 object PartialUnification213 extends App {
 

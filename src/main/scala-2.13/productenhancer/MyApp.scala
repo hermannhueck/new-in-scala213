@@ -1,7 +1,7 @@
 package productenhancer
 
 import scala.util.chaining._
-import util._
+import util.formatting._
 
 case class Employee(name: String, age: Int, manager: Boolean)
 

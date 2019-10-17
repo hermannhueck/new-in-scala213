@@ -6,7 +6,7 @@ import scala.collection.immutable
 import scala.collection.immutable.ArraySeq
 import scala.collection.mutable.ArrayBuffer
 
-import util._
+import util.formatting._
 
 object Seq213 extends App {
 

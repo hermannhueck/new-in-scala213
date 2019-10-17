@@ -2,7 +2,7 @@ package feature.stdlib
 
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object NamedProductElements213 extends App {
 

@@ -6,7 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object Seq212 extends App {
 

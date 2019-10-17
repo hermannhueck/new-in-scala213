@@ -2,7 +2,7 @@ package feature.language;
 
 import scala.util.chaining._
 
-import util._
+import util.formatting._
 
 object LiteralTypes213 extends App {
 
