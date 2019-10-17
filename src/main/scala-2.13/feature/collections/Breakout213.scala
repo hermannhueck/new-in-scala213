@@ -17,6 +17,8 @@ object Breakout213 extends App {
   val toPair: Int => (Int, Int) = x => x -> x
   println
 
+  // In 2.13 we use the to method to convert the mapped iterator into the target collection.
+
   val list2                      = list.iterator.map(toPair)
   val array: Array[(Int, Int)]   = list.iterator.map(toPair).to(Array)
   val stream: Stream[(Int, Int)] = list.iterator.map(toPair).to(Stream)
@@ -30,9 +32,6 @@ object Breakout213 extends App {
   ">>> target type: Seq[Int, Int]" tap println; println(seq)
   ">>> target type: Set[Int, Int]" tap println; println(set)
   ">>> target type: Map[Int, Int]" tap println; println(map)
-
-  // The return type is implicitly chosen by the compiler to best match the expected type.
-  // Depending on how you declare the receiving variable, you get different results.
 
   prtLine()
 }

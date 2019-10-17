@@ -17,6 +17,9 @@ object Breakout212 extends App {
   val toPair: Int => (Int, Int) = x => x -> x
   println
 
+  // With breakOut the return type is implicitly chosen by the compiler to best match the expected type.
+  // Depending on how you declare the receiving variable, you get different results.
+
   val indexedSeq                 = list.map(toPair)(collection.breakOut)
   val array: Array[(Int, Int)]   = list.map(toPair)(collection.breakOut)
   val stream: Stream[(Int, Int)] = list.map(toPair)(collection.breakOut)
@@ -30,9 +33,6 @@ object Breakout212 extends App {
   ">>> target type: Seq[Int, Int]" tap println; println(seq)
   ">>> target type: Set[Int, Int]" tap println; println(set)
   ">>> target type: Map[Int, Int]" tap println; println(map)
-
-  // The return type is implicitly chosen by the compiler to best match the expected type.
-  // Depending on how you declare the receiving variable, you get different results.
 
   prtLine()
 }
