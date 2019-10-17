@@ -36,13 +36,14 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
     Compile / scalacOptions ++= {
       val sv = (Compile / scalaVersion).value
-      if (sv.startsWith("2.13")) {
-        println(s"\n>>>>>          compiling for Scala $sv\n")
-        Seq() // Scala 2.13: partial-unification already enabled
-      } else {
-        println(s"\n>>>>>          compiling for Scala $sv\n")
-        Seq("-Ypartial-unification") // Scala 2.12: enable partial-unification
-      }
+      println(s"\n>>>>>          compiling for Scala $sv\n")
+      if (sv.startsWith("2.13"))
+        Seq.empty
+      else
+        Seq(
+          "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
+          "-language:higherKinds"  // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+        )
     }
   )
 
