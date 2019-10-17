@@ -2,11 +2,13 @@ package feature.stdlib
 
 import util.formatting._
 
-object Chaining212 extends App {
+object Chaining212and213 extends App {
 
   prtTitleObjectName(this)
 
-  prtSubTitle("Chaining 2.12")
+  prtSubTitle("Chaining 2.12 + 2.13")
+
+  println(s"${dash(10)} without chaining ${dash(10)}")
 
   {
     val x: Int = 5
@@ -19,10 +21,13 @@ object Chaining212 extends App {
     println(z.get)
   }
 
-  println("-----")
+  println(s"${dash(10)} with chaining ${dash(10)}")
 
   {
     import scala.util.chaining._
+
+    "In 2.13 chaining is provided by scala.util.chaining in the scala standard lib." tap println
+    "In 2.12 chaining is provided by scala.util.chaining in my user lib.\n" tap println
 
     val x: Int = 5 tap println
 
