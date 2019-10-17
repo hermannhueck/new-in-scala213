@@ -20,7 +20,7 @@ object PartialUnification212 extends App {
   prtSubTitle("Partial Unification 2.12")
 
   println("----- Scala 2.12: code compiles only with -Ypartial-unification enabled ---")
-  import feature.stdlib.Using212._
+  import feature.stdlib.Using212and213._
   lines("src/main/scala-2.12/feature/language/PartialUnification212.scala")
     .slice(19, 29) foreach println
 

@@ -1,19 +1,22 @@
-package feature.stdlib;
+package feature.stdlib
 
 import java.io.{BufferedReader, FileReader}
 
-import scala.util.{Failure, Success, Try, Using}
+import scala.util.{Failure, Success, Try}
+
+import scala.util.Using
 import scala.util.chaining._
 
+import compat213.collections.unfold._
 import util.formatting._
 
-object Using213 extends App {
+object Using212and213 extends App {
 
   prtTitleObjectName(this)
 
-  prtSubTitle("Using 2.13")
+  prtSubTitle("Using 2.12 and 2.13")
 
-  def bufferedReader(fileName: String): BufferedReader =
+  def bufferedReader(fileName: String) =
     new BufferedReader(new FileReader(fileName))
 
   def readLines(reader: BufferedReader): Seq[String] =
