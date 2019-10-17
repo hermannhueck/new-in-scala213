@@ -46,10 +46,9 @@ object NamedProductElements213 extends App {
     pairToJson(p.productElementName(index), p.productElement(index))
 
   def productToJson(product: Product): String =
-    (0 until product.productArity).toList
-      .map { index =>
-        productElementToJson(product, index)
-      }
+    (0 until product.productArity)
+      .toList
+      .map(index => productElementToJson(product, index))
       .mkString("{ ", ", ", " }")
 
   implicit class ProductOps(private val product: Product) extends AnyVal {
