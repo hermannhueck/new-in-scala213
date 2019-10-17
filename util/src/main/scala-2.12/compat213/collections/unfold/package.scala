@@ -1,6 +1,6 @@
-package compat213
+package compat213.collections
 
-package object collections {
+package object unfold {
 
   def unfoldToStream[A, B](init: A)(f: A => Option[(B, A)]): Stream[B] =
     f(init)

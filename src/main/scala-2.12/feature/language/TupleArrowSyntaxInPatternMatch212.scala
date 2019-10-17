@@ -6,7 +6,7 @@ import scala.util.Using
 import scala.util.chaining._
 
 import util.formatting._
-import util.collections._
+import compat213.collections.unfold._
 
 object TupleArrowSyntaxInPatternMatch212 extends App {
 
