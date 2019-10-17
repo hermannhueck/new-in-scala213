@@ -1,16 +1,17 @@
-package feature.stdlib;
+package feature.stdlib
 
 import scala.util.chaining._
+import compat213.either._
 
 import util.formatting._
 
-object Either213 extends App {
+object EitherFlatten212and213 extends App {
 
   prtTitleObjectName(this)
 
-  prtSubTitle("Either 2.13")
+  prtSubTitle("Either#flatten 2.12 and 2.13")
 
-  "Either#flatten is available in 2.13" tap println
+  "Either#flatten is available in 2.13, not in 2.12, but provided by compat213.either" tap println
   println
 
   val rr = Right(Right(42))
