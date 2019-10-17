@@ -1,8 +1,9 @@
-package feature.collections
+package feature.collections.seqmigration
 
 import scala.collection.compat.immutable.ArraySeq
 import scala.collection.mutable.ArrayBuffer
 
+import scala.util.chaining._
 import util.formatting._
 
 object SeqMigration01 extends App {
@@ -10,6 +11,8 @@ object SeqMigration01 extends App {
   prtTitleObjectName(this)
 
   prtSubTitle("SeqMigration Strategy 01")
+  "----- view source code -----" tap println
+
   trait Order
   trait Food
 
