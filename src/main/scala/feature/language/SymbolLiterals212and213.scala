@@ -8,7 +8,7 @@ object SymbolLiterals212and213 extends App {
 
   prtTitleObjectName(this)
 
-  prtSubTitle("Symbol Literals deprecated in 2.13")
+  prtSubTitle("Symbol Literals allowed in 2.12, deprecated in 2.13")
 
   val symbol1 = 'symbol1 // deprecated in 2.13
   symbol1 tap println
