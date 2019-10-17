@@ -354,7 +354,7 @@ name: compiler
 <br/>
 - ###Performance improved
 
-- ###Some improvments already flew back to 2.12.8. More to come in 2.12.9.
+- ###Some improvments already flew back to 2.12.8, 2.12.9, 2.12.10.
 
 - ###Deterministic, reproducible compilation
 
@@ -466,18 +466,17 @@ val times6 = (_: Int) * 6
 
 ---
 
-<br/>
 ## How to backport to 2.12: *pipe* &nbsp;and *tap*
-<br/>
+
+- in 2.12 backport library use same package name as in 2.13 stdlib: *scala.util.chaining*
 
 ```scala
-package compat213
+package scala.util
 
 package object chaining {
 
   implicit class ChainingOps[A](private val a: A) {
     def pipe[B](f: A => B): B = f(a)
-    def |>[B](f: A => B): B = a pipe f
     def tap[B](f: A => Unit): A = a pipe ( x => { f(x); x } )
   }
 }
@@ -486,7 +485,7 @@ package object chaining {
 --
 
 ```scala
-import compat213.chaining._
+import scala.util.chaining._
 
 val x: Int = 5 tap println
 
