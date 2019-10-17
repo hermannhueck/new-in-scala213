@@ -1,7 +1,5 @@
 package scala.util
 
-import scala.util.Try
-
 import scala.language.reflectiveCalls
 
 object Using {

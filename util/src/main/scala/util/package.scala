@@ -70,6 +70,12 @@ package object util {
     s"$leading$line$trailing"
   }
 
+  def dash(
+      width: Int,
+      fill: String = "\u2500"
+  ): String =
+    line(width, "", "", fill)
+
   def objectNameSimple(scalaObject: java.lang.Object) = {
     val cn = scalaObject.getClass().getSimpleName()
     cn.substring(0, cn.length() - 1)

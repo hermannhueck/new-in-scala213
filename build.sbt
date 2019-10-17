@@ -29,6 +29,7 @@ inThisBuild(
 )
 
 lazy val root = (project in file("."))
+  .dependsOn(util)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
@@ -45,6 +46,15 @@ lazy val root = (project in file("."))
         Seq("-Ypartial-unification") // Scala 2.12: enable partial-unification
       }
     }
+  )
+
+lazy val util = (project in file("util"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "util",
+    description := "Utilities",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "build"
   )
 
 // https://github.com/typelevel/kind-projector
