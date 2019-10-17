@@ -1,6 +1,6 @@
 package feature.collections
 
-import compat213.chaining._
+import scala.util.chaining._
 
 import util._
 

@@ -1,6 +1,6 @@
 package feature.stdlib
 
-import compat213.chaining._
+import scala.util.chaining._
 import compat213.either._
 
 import util._

@@ -4,7 +4,7 @@ import java.io.{BufferedReader, FileReader}
 
 import scala.util.{Failure, Success, Try}
 
-import compat213.chaining._
+import scala.util.chaining._
 import compat213.Using
 
 import util._

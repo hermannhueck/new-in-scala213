@@ -2,7 +2,7 @@ package feature.collections
 
 import java.io.{BufferedReader, FileReader}
 
-import compat213.chaining._
+import scala.util.chaining._
 import compat213.collections._
 import compat213.Using
 

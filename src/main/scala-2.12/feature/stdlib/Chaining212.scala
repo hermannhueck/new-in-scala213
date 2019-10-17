@@ -22,12 +22,13 @@ object Chaining212 extends App {
   println("-----")
 
   {
-    import compat213.chaining._
+    import util.chaining._
+    import scala.util.chaining._
 
     val x: Int = 5 tap println
 
-    val y: Int = 5 pipe (_ * x) tap println
-    val z: Int = 5 |> (_ * x) tap println
+    5 pipe (_ * x) tap println
+    5 |> (_ * x) tap println
 
     List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
 
