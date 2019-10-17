@@ -2,7 +2,7 @@ package compat213
 
 import scala.util.Try
 
-package object string {
+package object stringops {
 
   implicit class StringOps(private val s: String) extends AnyVal {
     @inline def toIntOption: Option[Int]         = Try(s.toInt).toOption
