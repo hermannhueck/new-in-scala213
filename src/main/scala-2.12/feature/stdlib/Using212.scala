@@ -4,8 +4,8 @@ import java.io.{BufferedReader, FileReader}
 
 import scala.util.{Failure, Success, Try}
 
+import scala.util.Using
 import scala.util.chaining._
-import compat213.Using
 
 import util._
 
