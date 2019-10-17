@@ -1,4 +1,4 @@
-package productenhancer213
+package feature.stdlib.productenhancer213
 
 import scala.util.chaining._
 
