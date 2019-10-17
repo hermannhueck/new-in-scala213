@@ -2,30 +2,28 @@ package feature.collections
 
 import java.io.{BufferedReader, FileReader}
 
-import scala.util.Using
 import scala.util.chaining._
-
-import compat213.collections.unfold._
+import scala.util.Using
 import util.formatting._
+import compat213.collections.unfold._
 
-object Unfold212 extends App {
+object Unfold212and213 extends App {
 
   prtTitleObjectName(this)
+
+  "In 2.13 unfold is a factory method of different collection companion objects" tap println
+  "In 2.12 unfold is provided by my compat213 library" tap println
 
   val unfoldFunction: Int => Option[(Int, Int)] = {
     case 0 => None
     case s => Some(((s * s), (s - 1)))
   }
 
-  prtSubTitle("Stream.unfold 2.12")
-
-  Stream.unfold(10)(unfoldFunction).toList tap println
-
-  prtSubTitle("List.unfold 2.12")
+  prtSubTitle("List.unfold")
 
   List.unfold(10)(unfoldFunction) tap println
 
-  prtSubTitle("Iterator.unfold 2.12")
+  prtSubTitle("Iterator.unfold")
 
   def bufferedReader(fileName: String) =
     new BufferedReader(new FileReader(fileName))
