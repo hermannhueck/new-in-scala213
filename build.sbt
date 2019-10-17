@@ -29,11 +29,9 @@ inThisBuild(
 )
 
 lazy val root = (project in file("."))
-  .dependsOn(util)
+  .dependsOn(compat213, util)
   .enablePlugins(BuildInfoPlugin)
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "build",
     bloopGenerate in Test := None,
     libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
     Compile / scalacOptions ++= {
@@ -46,6 +44,12 @@ lazy val root = (project in file("."))
         Seq("-Ypartial-unification") // Scala 2.12: enable partial-unification
       }
     }
+  )
+
+lazy val compat213 = (project in file("compat213"))
+  .settings(
+    name := "compat213",
+    description := "compat library providing scala 2.13 extensions for scala 2.12"
   )
 
 lazy val util = (project in file("util"))
