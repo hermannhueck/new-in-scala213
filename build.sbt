@@ -18,8 +18,7 @@ inThisBuild(
       "UTF-8",        // source files are in UTF-8
       "-deprecation", // warn about use of deprecated APIs
       "-unchecked",   // warn about unchecked type parameters
-      "-feature",     // warn about misused language features
-      "-Xlint"        // enable handy linter warnings
+      "-feature"      // warn about misused language features
     ),
     libraryDependencies ++= Seq(
       scalaTest,
@@ -38,11 +37,15 @@ lazy val root = (project in file("."))
       val sv = (Compile / scalaVersion).value
       println(s"\n>>>>>          compiling for Scala $sv\n")
       if (sv.startsWith("2.13"))
-        Seq.empty
+        Seq(
+          "-Xlint:-unused,_" // suppress unused warnings in 2.13
+          // "-Xlint"
+        )
       else
         Seq(
           "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-          "-language:higherKinds"  // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+          "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+          "-Xlint"                 // enable handy linter warnings
         )
     }
   )
