@@ -36,7 +36,7 @@ lazy val root = (project in file("."))
     scalacOptions ++= {
       println(s"\n>>>>>          compiling for Scala ${(scalaVersion).value}\n")
       CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, n)) if n >= 13 =>
+        case Some((2, minor)) if minor >= 13 =>
           Seq(
             "-Xlint:-unused,_" // suppress unused warnings in 2.13
             // "-Xlint"
