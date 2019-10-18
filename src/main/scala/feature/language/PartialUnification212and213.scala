@@ -17,16 +17,18 @@ import util.formatting._
 /*
   see scalacOptions in build.sbt:
 
-    Compile / scalacOptions ++= {
-      val sv = (Compile / scalaVersion).value
-      println(s"\n>>>>>          compiling for Scala $sv\n")
-      if (sv.startsWith("2.13"))
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, n)) if n >= 13 =>
         Seq.empty
-      else
+      case _ =>
         Seq(
           "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-          "-language:higherKinds"  // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+          "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
         )
+    }
+  }
+
  */
 
 object PartialUnification212and213 extends App {
@@ -36,12 +38,12 @@ object PartialUnification212and213 extends App {
   prtSubTitle("Partial Unification 2.13")
 
   """----- Scala 2.13: partial-unification is already enabled ---""" tap println
-  """----- Scala 2.12: scalacOptions += "-Ypartial-unification" ---""" tap println
+  """----- Scala 2.12: scalacOptions += "-Ypartial-unification" ---\n""" tap println
 
   import feature.stdlib.Using212and213._
 
-  lines("src/main/scala/feature/language/PartialUnification212and213.scala")
-    .slice(30, 56) foreach println
+  val file = "src/main/scala/feature/language/PartialUnification212and213.scala"
+  printFileContent(file, 33, 66)
 
   def foo[F[_], A](fa: F[A]): String =
     fa.toString
@@ -53,4 +55,12 @@ object PartialUnification212and213 extends App {
   foo(intToInt)
 
   prtLine()
+
+  def printFileContent(file: String, fromIncl: Int, toIncl: Int): Unit =
+    lines(file)
+      .zipWithIndex
+      .map { case (line, index) => (index + 1, line) }
+      .map { case (no, line) => s"$no    $line" }
+      .slice(fromIncl - 1, toIncl)
+      .foreach(println)
 }
