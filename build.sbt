@@ -33,20 +33,21 @@ lazy val root = (project in file("."))
   .settings(
     bloopGenerate in Test := None,
     libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
-    Compile / scalacOptions ++= {
-      val sv = (Compile / scalaVersion).value
-      println(s"\n>>>>>          compiling for Scala $sv\n")
-      if (sv.startsWith("2.13"))
-        Seq(
-          "-Xlint:-unused,_" // suppress unused warnings in 2.13
-          // "-Xlint"
-        )
-      else
-        Seq(
-          "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-          "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
-          "-Xlint"                 // enable handy linter warnings
-        )
+    scalacOptions ++= {
+      println(s"\n>>>>>          compiling for Scala ${(scalaVersion).value}\n")
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, n)) if n >= 13 =>
+          Seq(
+            "-Xlint:-unused,_" // suppress unused warnings in 2.13
+            // "-Xlint"
+          )
+        case _ =>
+          Seq(
+            "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
+            "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+            "-Xlint"                 // enable handy linter warnings
+          )
+      }
     }
   )
 
