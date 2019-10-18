@@ -1,7 +1,7 @@
 package feature.stdlib
 
 import scala.util.chaining._
-import compat213.stringops._
+import compat213.string._
 
 import util.formatting._
 
@@ -9,7 +9,7 @@ object StringOps212and213 extends App {
 
   prtTitleObjectName(this)
 
-  prtSubTitle("StringOps 2.12 and 213")
+  prtSubTitle("StringOps 2.12 and 2.13")
 
   "----- String#toIntOption" tap println
   val i1    = "42".toInt tap println
