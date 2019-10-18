@@ -2,11 +2,11 @@
 <html>
 
 <head>
-  <title>New in Scala 2.13</title>
+  <title>What's new in Scala 2.13?</title>
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="keywords" content="Scala 2.13">
-  <meta name="description" content="New in Scala 2.13">
+  <meta name="description" content="What's new in Scala 2.13?">
 
   <style type="text/css">
     @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
@@ -243,7 +243,7 @@ class: center
 <br/>
 <br/>
 <br/>
-# New in Scala 2.13
+# What's new in Scala 2.13?
 
 <br/>
 <br/>
@@ -265,7 +265,14 @@ The list of features is not comprehensive, but it is my personal selection of fa
 I will focus on those which IMO impact/ease the programmers live most.
 
 I will look at 5 feature areas: compiler, standard library, language changes,
-Future and finally collections which have been redesigned in 2.13.
+Future and finally the most important change the redesigned collections library.
+
+I will not only show the new features of 2.13. In many cases I will show how the
+new features of 2.13 can be backported to 2.12 und be used in mostly the same way as in 2.13.
+
+Finally I'll give some guide lines for the migration from 2.12 to 2.13 and for a cross version
+project which compiles a code base with both compiler versions.
+
 ---
 
 <br/>
@@ -314,11 +321,12 @@ Release 2.13 improves Scala in the following areas:
 
 --
 
-- <u>Standard library</u>: Useful classes and methods have been added.
+- <u>Standard library</u>: New classes have been added and new methods enhance existing classes.
+  But also some deprecations.
 
 --
 
-- <u>Language</u>: Literal types, partial unification, by-name implicits, more.
+- <u>Language</u>: Literal types, partial unification is default, by-name implicits, more.
 
 --
 
@@ -354,7 +362,7 @@ name: compiler
 <br/>
 - ###Performance improved
 
-- ###Some improvments already flew back to 2.12.8, 2.12.9, 2.12.10.
+- ###Some improvments already flew back into 2.12.8, 2.12.9, 2.12.10.
 
 - ###Deterministic, reproducible compilation
 
@@ -377,8 +385,6 @@ name: sbt_setup
 
 ## Cross compile with sbt
 
-<br/>
-<br/>
 ```scala
 val scala212               = "2.12.10"
 val scala213               = "2.13.1"
@@ -391,6 +397,25 @@ inThisBuild(
     ...
   )
 )
+```
+
+--
+
+```scala
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, minor)) if minor >= 13 =>
+        Seq(
+          "-Xlint:-unused,_" // suppress unused warnings in 2.13
+        )
+      case _ =>
+        Seq(
+          "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
+          "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+          "-Xlint"                 // enable handy linter warnings
+        )
+    }
+  }
 ```
 
 ---
@@ -409,11 +434,10 @@ name: standard_library
 ---
 
 <br/>
-<br/>
 ## Smaller Footprint
 <br/>
 
-###No longer included:
+###No longer included in the stdlib:
 
 - ###*scala-parallel-collections*
 
@@ -422,6 +446,9 @@ name: standard_library
 - ###*scala-parser-combinators*
 
 - ###*scala-swing*
+
+<br/>
+These become libraries of their own.
 
 ---
 
@@ -476,8 +503,9 @@ package scala.util
 package object chaining {
 
   implicit class ChainingOps[A](private val a: A) {
-    def pipe[B](f: A => B): B = f(a)
-    def tap[B](f: A => Unit): A = a pipe ( x => { f(x); x } )
+
+    @inline def pipe[B](f: A => B): B   = f(a)
+    @inline def tap[B](f: A => Unit): A = { f(a); a }
   }
 }
 ```
@@ -497,16 +525,20 @@ val times6 = (_: Int) * 6
 (1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
 ```
 
+The same code runs without friction under 2.12 and 2.13.
+
 ---
 
 <br/>
 ## Either: *Right.withLeft* &nbsp;and *Left.withRight*
 <br/>
 
-- The constructor *Right* leaves the left type unspecified.<br/>
-- The constructor *Left* leaves the right type unspecified.
+- *Right.apply* leaves the left type unspecified.<br/>
+- *Left.apply* leaves the right type unspecified.
+- *Right.withLeft* &nbsp;and *Left.withRight* let you specity the unspecified type.
 
-<br/>
+--
+
 ```html
 sbt:New in Scala 2.13> ++2.13.0 console
 ...
@@ -538,26 +570,23 @@ package compat213
 package object either {
 
   implicit class RightOps[L, R](private val right: Right[L, R]) {
-    def withLeft[LL](implicit ev: L <:< LL): Either[LL, R] =
-      right.asInstanceOf[Either[LL, R]]
+    @inline def withLeft[LL >: L]: Either[LL, R] = right
   }
 
   implicit class LeftOps[L, R](private val left: Left[L, R]) {
-    def withRight[RR](implicit ev: R <:< RR): Either[L, RR] =
-      left.asInstanceOf[Either[L, RR]]
+    @inline def withRight[RR >: R]: Either[L, RR] = left
   }
 }
 ```
 
 ---
 
-<br/>
 ## *Either#flatten*
 <br/>
 
 - available since 2.13
 
-- *Either#flatten* is equivalent to *Either#flatMap(x => x)* &nbsp; (usable in 2.12)
+- *Either#flatten* is equivalent to *Either#flatMap(x => x)*
 
 --
 
@@ -567,13 +596,16 @@ package object either {
 
 ```scala
 val rr = Right(Right(42))
-rr.flatMap(x => x)
+rr.flatMap(x => x) //=> Right(42)
 
 val rl = Right(Left("Error RL"))
-rl.flatMap(x => x)
+rl.flatMap(x => x) //=> Left("Error RL")
 
 val l = Left("Error L")
-l.flatMap(x => x)
+l.flatMap(x => x) //=> Left("Error L")
+
+val ll = Left(Left("Error LL"))
+ll.flatMap(x => x) //=> Left(Left("Error LL"))
 ```
 ]
 
@@ -583,13 +615,16 @@ l.flatMap(x => x)
 
 ```scala
 val rr = Right(Right(42))
-rr.flatten
+rr.flatten //=> Right(42)
 
 val rl = Right(Left("Error RL"))
-rl.flatten
+rl.flatten //=> Left("Error RL")
 
 val l = Left("Error L")
-l.flatten
+l.flatten //=> Left("Error L")
+
+val ll = Left(Left("Error LL"))
+ll.flatten //=> Left(Left("Error LL"))
 ```
 ]
 
@@ -612,7 +647,9 @@ package object either {
 
   implicit class EitherOps[+L, +R](private val either: Either[L, R]) {
 
-    def flatten[L1 >: L, RR](implicit ev: R <:< Either[L1, RR]): Either[L1, RR] =
+    @inline def flatten[L1 >: L, RR](
+        implicit ev: R <:< Either[L1, RR]
+    ): Either[L1, RR] =
       either.flatMap(x => x)
   }
 }
@@ -658,14 +695,15 @@ res3: Option[Boolean] = Some(true)
 ```scala
 package compat213
 
-import scala.util.Try
-
 package object string {
-
+  
   implicit class StringOps(private val s: String) {
-    def toIntOption: Option[Int] = Try(s.toInt).toOption
-    def toDoubleOption: Option[Double] = Try(s.toDouble).toOption
-    def toBooleanOption: Option[Boolean] = Try(s.toBoolean).toOption
+    
+    import scala.util.Try
+    
+    @inline def toIntOption: Option[Int]         = Try(s.toInt).toOption
+    @inline def toDoubleOption: Option[Double]   = Try(s.toDouble).toOption
+    @inline def toBooleanOption: Option[Boolean] = Try(s.toBoolean).toOption
   }
 }
 ```
@@ -686,7 +724,7 @@ def bufferedReader(fileName: String): BufferedReader =
   new BufferedReader(new FileReader(fileName))
 
 def readLines(reader: BufferedReader): Seq[String] =
-  ???
+  ??? // some impl
 
 def tryLines(fileName: String): Try[Seq[String]] =
   Using(bufferedReader(fileName)) { reader => readLines(reader) }
@@ -737,7 +775,6 @@ catFile2("README.md")
 
 ---
 
-<br/>
 ## Backport to 2.12: *Using*
 <br/>
 
@@ -749,10 +786,12 @@ import scala.language.reflectiveCalls
 
 object Using {
 
-  def apply[A, R <: {def close(): Unit}](resrc: R)(use: R => A): Try[A] =
+  type Closable = { def close(): Unit }
+
+  def apply[A, R <: Closable](resrc: R)(use: R => A): Try[A] =
     Try(resource(resrc)(use))
 
-  def resource[A, R <: {def close(): Unit}](resrc: R)(use: R => A): A =
+  def resource[A, R <: Closable](resrc: R)(use: R => A): A =
     try {
       use(resrc)
     } finally {
@@ -788,7 +827,7 @@ day tap println
 
 ## Named Product Elements
 
-### Case classes and other *Product*s (Tuples) now have methods *productElementNames* and *productElementName*.
+### *Product*s (i.e. case classes and Tuples) now have methods *productElementNames* &nbsp;and &nbsp;*productElementName*.
 
 --
 <br/>
@@ -964,7 +1003,6 @@ name: language_changes
 ---
 
 ## Language Changes Overview
-<br/>
 
 - Literal types: Literals (for strings, integers etc.) now have associated literal types.
 
@@ -982,6 +1020,10 @@ name: language_changes
 
 - Symbol literals deprecated:<br/>
   Deprecated: *'foo* &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Use instead: *Symbol("foo")*
+
+- New Tuple2 arrow syntax in pattern match:<br/>
+  2.12 and 2.13: &nbsp; *case (x, y) => ...*<br/>
+  2.13 only &nbsp; &nbsp; &nbsp; : &nbsp; *case x -> y => ...*
 
 ---
 
@@ -1033,6 +1075,28 @@ foo { intToInt }
 <br/>
 Detailed explanation of partial unification here:<br/>
 https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
+
+---
+
+<br/>
+<br/>
+### *scalacOptions* in *build.sbt* for cross compilation
+<br/>
+<br/>
+
+```scala
+scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, minor)) if minor >= 13 =>
+      Seq.empty
+    case _ =>
+      Seq(
+        "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
+        "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+      )
+  }
+}
+```
 
 ---
 
@@ -1156,41 +1220,6 @@ trait List[+A] extends ... {
 
 ---
 
-## Removed *collection.breakOut*
-
-- *collection.breakOut* in 2.12 inferred the return type of a collection operation from the expected result type.
-
-- It was based on *CanBuildFrom* which is gone in 2.13.
-
-- To avoid constructing intermediate collections, use *.view* and *.to(Collection)* instead.
-
---
-
-```scala
-val list = List(1, 2, 3) tap println
-val toPair: Int => (Int, Int) = x => x -> x
-```
-
-```scala
-// Scala 2.12 - type annotations required to infer the result type of list.map
-val indexedSeq                      = list.map(toPair)(collection.breakOut)
-val array   : Array[(Int, Int)]     = list.map(toPair)(collection.breakOut)
-val seq     : Seq[(Int, Int)]       = list.map(toPair)(collection.breakOut)
-val set     : Set[(Int, Int)]       = list.map(toPair)(collection.breakOut)
-val map     : Map[Int, Int]         = list.map(toPair)(collection.breakOut)
-```
-
-```scala
-// Scala 2.13 - type annotations not required
-val list2                           = list.iterator.map(toPair)
-val array                           = list.iterator.map(toPair).to(Array)
-val seq                             = list.iterator.map(toPair).to(Seq)
-val set                             = list.iterator.map(toPair).to(Set)
-val map                             = list.iterator.map(toPair).to(Map)
-```
-
----
-
 <br/>
 <br/>
 ## Simpler Type Hierarchy
@@ -1283,7 +1312,7 @@ But the compiler spits out a warning.
 ```scala
 val orderArray = Array(new Order {})
 
-val food2 = orderFood(orderArray)     // COMPILES!
+val food2 = orderFood(orderArray)     // COMPILES WITH WARNING!
 // [warn] Implicit conversions from Array to immutable.IndexedSeq
 // [warn] are implemented by copying; Use the more efficient non-copying
 // [warn] ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call.
@@ -1505,7 +1534,7 @@ val stream: Stream[(Int, Int)] =
     .take(10)
     .zipWithIndex
     .map { case (value, index) =>
-      (index, value)
+      index -> value
     }
 ```
 ]
@@ -1520,8 +1549,8 @@ val ll: LazyList[(Int, Int)] =
     .continually(42)
     .take(10)
     .zipWithIndex
-    .map { case (value, index) =>
-      (index, value)
+    .map { case value -> index =>
+      index -> value
     }
 ```
 ]
@@ -1707,9 +1736,45 @@ def unfoldToList[A, B](init: A)(f: A => Option[(B, A)]): List[B] =
   unfoldToStream(init)(f).toList
 
 implicit class ListCompanionOps(private val self: List.type) extends AnyVal {
+
   @inline def unfold[A, B](init: A)(f: A => Option[(B, A)]): List[B] =
     unfoldToList(init)(f)
 }
+```
+
+---
+
+## Removed *collection.breakOut*
+
+- *collection.breakOut* in 2.12 inferred the return type of a collection operation from the expected result type.
+
+- It was based on *CanBuildFrom* which is gone in 2.13.
+
+- To avoid constructing intermediate collections, use *.view* and *.to(Collection)* instead.
+
+--
+
+```scala
+val list = List(1, 2, 3) tap println
+val toPair: Int => (Int, Int) = x => x -> x
+```
+
+```scala
+// Scala 2.12 - type annotations required to infer the result type of list.map
+val indexedSeq                      = list.map(toPair)(collection.breakOut)
+val array   : Array[(Int, Int)]     = list.map(toPair)(collection.breakOut)
+val seq     : Seq[(Int, Int)]       = list.map(toPair)(collection.breakOut)
+val set     : Set[(Int, Int)]       = list.map(toPair)(collection.breakOut)
+val map     : Map[Int, Int]         = list.map(toPair)(collection.breakOut)
+```
+
+```scala
+// Scala 2.13 - type annotations not required
+val list2                           = list.view.map(toPair).to(List)
+val array                           = list.view.map(toPair).to(Array)
+val seq                             = list.view.map(toPair).to(Seq)
+val set                             = list.view.map(toPair).to(Set)
+val map                             = list.view.map(toPair).to(Map)
 ```
 
 ---
@@ -1729,10 +1794,10 @@ def map[B](f: ((K, V)) => B): Iterable[B]
 --
 
 <br/>
-- If the mapping function *f* transforms a key value pair *(K, V)* into another key value pair *(K2, V2)*,
+- If the mapping function &nbsp;*f*&nbsp; transforms a key value pair *(K, V)* into another key value pair *(K2, V2)*,
   *map* returns a *Map[K2, V2]*.
 
-- OTOH if the mapping function *f* transforms a key value pair *(K, V)* into some other value *B*,
+- OTOH if the mapping function &nbsp;*f*&nbsp; transforms a key value pair *(K, V)* into some other value *B*,
   *map* returns a *Iterable[B]*.
 
 - Roughly the same holds for the two *Map#flatMap* operations.
@@ -1773,7 +1838,8 @@ name: architecture_collections
 
 --
 
-A Non-solution with simple inheritance
+<br/>
+A Non-solution with simple inheritance:
 
 ```scala
 trait Iterable[A] {
@@ -1990,7 +2056,7 @@ name: migration
 
 - Upgrade your project to the latest 2.12.x version.
 
-- Remove all deprecation warnings. Turn warnings into errors: *scalacOptins += -Xfatal-warnings*
+- Remove all deprecation warnings. Turn warnings into errors: *scalacOptions += -Xfatal-warnings*
 
 - Scalafix them if there are many. (Turn off *-Xfatal-warnings* while running scalafix. This option let's scalafix fail.)
 
@@ -2045,7 +2111,7 @@ Add scalafix plugin
 
 ```scala
 // project/plugins.sbt
-addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.5")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalafix" % "0.9.7")
 ```
 
 --
@@ -2076,7 +2142,7 @@ Run scalafix in sbt shell (for upgrade to 2.13)
 > ;test:scalafix Collection213Upgrade ;scalafix Collection213Upgrade
 ```
 
-Run scalafix in sbt shell (for cross compilation to 2.12/2.13)
+Run scalafix in sbt shell (for cross compilation with 2.12 and 2.13)
 
 ```scala
 > ;test:scalafix Collection213CrossCompat ;scalafix Collection213CrossCompat
