@@ -6,7 +6,7 @@ package object formatting {
 
   val sbtVersion       = BuildInfo.sbtVersion
   val scalaVersion     = BuildInfo.scalaVersion
-  val buildInfo        = s"BuildInfo:  sbt.version = $sbtVersion,  scala.version = $scalaVersion"
+  val buildInfo        = s"BuildInfo: sbt.version = $sbtVersion, scala.version = $scalaVersion"
   val buildInfoColored = s"${Console.BLUE}$buildInfo${Console.RESET}"
   val buildInfoLong    = BuildInfo.toString
 
