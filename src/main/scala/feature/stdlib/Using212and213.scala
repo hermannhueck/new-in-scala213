@@ -16,11 +16,15 @@ object Using212and213 extends App {
 
   prtSubTitle("Using 2.12 and 2.13")
 
-  def bufferedReader(fileName: String) =
+  def bufferedReader(fileName: String): BufferedReader =
     new BufferedReader(new FileReader(fileName))
 
   def readLines(reader: BufferedReader): Seq[String] =
-    Iterator.unfold(())(_ => Option(reader.readLine()).map(_ -> ())).toList
+    Iterator
+      .unfold(()) { _ =>
+        Option { reader.readLine() }.map(x => (x, ()))
+      }
+      .toList
 
   def tryLines(fileName: String): Try[Seq[String]] =
     Using(bufferedReader(fileName)) { reader =>

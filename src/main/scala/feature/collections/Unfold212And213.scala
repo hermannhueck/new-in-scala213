@@ -25,17 +25,21 @@ object Unfold212and213 extends App {
 
   prtSubTitle("Iterator.unfold")
 
-  def bufferedReader(fileName: String) =
+  def bufferedReader(fileName: String): BufferedReader =
     new BufferedReader(new FileReader(fileName))
 
-  def readLines(reader: BufferedReader) =
-    Iterator.unfold(())(_ => Option(reader.readLine()).map(_ -> ())).toList
+  def readLines(reader: BufferedReader): Seq[String] =
+    Iterator
+      .unfold(()) { _ =>
+        Option { reader.readLine() }.map(x => (x, ()))
+      }
+      .toList
 
-  def readLines_dissected(reader: BufferedReader): List[String] = {
+  def readLines_dissected(reader: BufferedReader): Seq[String] = {
     val initialState: Unit = ()
     val iterator: Iterator[String] = Iterator.unfold(initialState) { _ =>
       val maybeLine: Option[String]              = Option(reader.readLine())
-      val maybeLineState: Option[(String, Unit)] = maybeLine.map(_ -> ())
+      val maybeLineState: Option[(String, Unit)] = maybeLine.map(x => (x, ()))
       maybeLineState
     }
     iterator.toList
