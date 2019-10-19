@@ -37,10 +37,11 @@ object Seq213 extends App {
 
   val orderArray = Array(new Order {})
 
-  // We can pass a mutable Array where an immutable Seq is expected. But compiler warns us.
-  val food2 = orderFood(orderArray)
+  // We can pass a mutable Array where an immutable Seq is expected.
+  // val food2 = orderFood(orderArray) // But compiler produces a warning!!!
   // [warn] Implicit conversions from Array to immutable.IndexedSeq are implemented by copying;
   // [warn] Use the more efficient non-copying ArraySeq.unsafeWrapArray or an explicit toIndexedSeq call
+  // !!! for warning free solution see food6 !!!
 
   // toSeq (or toIndexedSeq) wraps the mutable ArrayBuffer in an immutable Seq
   val food3  = orderFood(orderArray.toSeq)
