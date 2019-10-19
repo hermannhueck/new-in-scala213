@@ -15,10 +15,13 @@ inThisBuild(
     publish / skip := true,
     scalacOptions ++= Seq(
       "-encoding",
-      "UTF-8",        // source files are in UTF-8
-      "-deprecation", // warn about use of deprecated APIs
-      "-unchecked",   // warn about unchecked type parameters
-      "-feature"      // warn about misused language features
+      "UTF-8",            // source files are in UTF-8
+      "-deprecation",     // warn about use of deprecated APIs
+      "-unchecked",       // warn about unchecked type parameters
+      "-feature",         // warn about misused language features
+      "-explaintypes",    // explain type errors in more detail
+      "-Xfatal-warnings", // fail the compilation if there are any warnings
+      "-Xcheckinit"       // wrap field accessors to throw an exception on uninitialized access
     ),
     libraryDependencies ++= Seq(
       scalaTest,
