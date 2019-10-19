@@ -384,16 +384,15 @@ name: sbt_setup
 ---
 
 ## Cross compile with sbt
+<br/>
 
 ```scala
-val scala212               = "2.12.10"
-val scala213               = "2.13.1"
-val supportedScalaVersions = List(scala212, scala213)
+// build.sbt
 
 inThisBuild(
   Seq(
-    scalaVersion := scala213,
-    crossScalaVersions := supportedScalaVersions,
+    scalaVersion := "2.13.1",
+    crossScalaVersions := List("2.12.10", "2.13.1"),
     ...
   )
 )
@@ -405,15 +404,14 @@ inThisBuild(
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, minor)) if minor >= 13 =>
-        Seq(
-          "-Xlint:-unused,_" // suppress unused warnings in 2.13
-        )
-      case _ =>
-        Seq(
-          "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-          "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
-          "-Xlint"                 // enable handy linter warnings
-        )
+      Seq.empty
+    case _ =>
+      Seq(
+        "-Ypartial-unification", // (removed in scala 2.13) allow the Compiler to
+                                 // unify type constructors of different arities
+        "-language:higherKinds", // (not required since scala 2.13.1) suppress
+                                 // warnings when using higher kinded types
+      )
     }
   }
 ```
@@ -1080,7 +1078,7 @@ https://gist.github.com/djspiewak/7a81a395c461fd3a09a6941d4cd040f2
 
 <br/>
 <br/>
-### *scalacOptions* in *build.sbt* for cross compilation
+### *scalacOptions* in *build.sbt* &nbsp;for cross compilation
 <br/>
 <br/>
 
@@ -1091,8 +1089,10 @@ scalacOptions ++= {
       Seq.empty
     case _ =>
       Seq(
-        "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-        "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
+        "-Ypartial-unification", // (removed in scala 2.13) allow the Compiler to
+                                 // unify type constructors of different arities
+        "-language:higherKinds"  // (not required since scala 2.13.1) suppress
+                                 // warnings when using higher kinded types
       )
   }
 }
