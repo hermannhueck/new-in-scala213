@@ -1,4 +1,5 @@
-name := "New in Scala 2.13"
+val projectName        = "New in Scala 2.13"
+val projectDescription = "New features in Scala 2.13"
 
 val scala212               = "2.12.10"
 val scala213               = "2.13.1"
@@ -31,9 +32,19 @@ inThisBuild(
 )
 
 lazy val root = (project in file("."))
+  .aggregate(examples)
+  .settings(
+    name := projectName,
+    description := projectDescription,
+    crossScalaVersions := Seq.empty
+  )
+
+lazy val examples = (project in file("examples"))
   .dependsOn(compat213, util)
   .enablePlugins(BuildInfoPlugin)
   .settings(
+    name := "examples",
+    description := "Examples for 2.12 and 2.13",
     bloopGenerate in Test := None,
     libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
     scalacOptions ++= {
