@@ -13,9 +13,9 @@ object LengthIs212 extends App {
   val xs = List.fill(5000)(scala.util.Random.nextInt)
 
   if (xs.length > 100) { // traverses all elements of the list in order to compute the length
-    new IllegalArgumentException("Too many elements!") tap println
+    new IllegalArgumentException("Too many elements!") pipe println
   } else {
-    s"The list has ${xs.length} elements." tap println
+    s"The list has ${xs.length} elements." pipe println
   }
 
   prtLine()

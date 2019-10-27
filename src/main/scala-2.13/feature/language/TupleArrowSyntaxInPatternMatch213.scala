@@ -11,7 +11,7 @@ object TupleArrowSyntaxInPatternMatch213 extends App {
   import feature.stdlib.Using212and213._
 
   val file = "build.sbt"
-  lines(file) flatMap toWords pipe wordCount tap println
+  lines(file) flatMap toWords pipe wordCount pipe println
 
   prtLine()
 

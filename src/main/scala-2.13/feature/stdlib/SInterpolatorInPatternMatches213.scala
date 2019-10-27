@@ -14,9 +14,9 @@ object SInterpolatorInPatternMatches213 extends App {
 
   val s"$day-$month-$year" = dateString
 
-  year tap println
-  month tap println
-  day tap println
+  year pipe println
+  month pipe println
+  day pipe println
 
   prtLine()
 }

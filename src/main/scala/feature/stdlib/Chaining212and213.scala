@@ -26,20 +26,29 @@ object Chaining212and213 extends App {
   {
     import scala.util.chaining._
 
-    "In 2.13 chaining is provided by scala.util.chaining in the scala standard lib." tap println
-    "In 2.12 chaining is provided by scala.util.chaining in my user lib.\n" tap println
+    "In 2.13 chaining is provided by scala.util.chaining in the scala standard lib." pipe println
+    "In 2.12 chaining is provided by scala.util.chaining in my user lib.\n" pipe println
 
     val x: Int = 5 tap println
 
-    5 pipe (_ * x) tap println
+    5 pipe (_ * x) pipe println
 
-    List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
+    List(1, 2, 3) pipe (ys => println("debug: " + ys.toString))
+
+    println
 
     val times6 = (_: Int) * 6
-    (1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
+    (1 - 2 - 3)
+      .tap(v => println(s"initial: $v"))
+      .pipe(times6)
+      .tap(v => println(s"after times6: $v"))
+      .pipe(scala.math.abs)
+      .pipe(v => println(s"after scala.math.abs: $v"))
+
+    println
 
     val doAll = times6 andThen scala.math.abs
-    doAll(1 - 2 - 3) tap println
+    doAll(1 - 2 - 3) pipe println
   }
 
   prtLine()

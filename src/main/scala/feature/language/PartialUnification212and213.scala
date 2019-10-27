@@ -37,8 +37,8 @@ object PartialUnification212and213 extends App {
 
   prtSubTitle("Partial Unification 2.13")
 
-  """----- Scala 2.13: partial-unification is already enabled ---""" tap println
-  """----- Scala 2.12: scalacOptions += "-Ypartial-unification" ---\n""" tap println
+  """----- Scala 2.13: partial-unification is already enabled ---""" pipe println
+  """----- Scala 2.12: scalacOptions += "-Ypartial-unification" ---\n""" pipe println
 
   import feature.stdlib.Using212and213._
 

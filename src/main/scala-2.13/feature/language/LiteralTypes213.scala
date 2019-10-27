@@ -11,16 +11,16 @@ object LiteralTypes213 extends App {
   prtSubTitle("Literal Types 2.13")
 
   val wahr: true = true
-  wahr tap println
+  wahr pipe println
 
   val foo: "foo" = "foo"
-  foo tap println
+  foo pipe println
 
   val one: 1 = 1
-  one tap println
+  one pipe println
 
   val other_one: one.type = one
-  other_one tap println
+  other_one pipe println
   implicitly[other_one.type =:= 1]
 
   val x1: Int = valueOf[42] tap println // is the same as ...

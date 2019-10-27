@@ -11,21 +11,21 @@ object StringOps212and213 extends App {
 
   prtSubTitle("StringOps 2.12 and 2.13")
 
-  "----- String#toIntOption" tap println
-  val i1    = "42".toInt tap println
-  val iOpt1 = "42".toIntOption tap println
-  val iOpt2 = "x42".toIntOption tap println
+  "----- String#toIntOption" pipe println
+  val i1    = "42".toInt pipe println
+  val iOpt1 = "42".toIntOption pipe println
+  val iOpt2 = "x42".toIntOption pipe println
 
-  "\n----- String#toDoubleOption" tap println
-  val d1    = "42.0".toDouble tap println
-  val dOpt1 = "42.0".toDoubleOption tap println
-  val dOpt2 = "42.x".toDoubleOption tap println
+  "\n----- String#toDoubleOption" pipe println
+  val d1    = "42.0".toDouble pipe println
+  val dOpt1 = "42.0".toDoubleOption pipe println
+  val dOpt2 = "42.x".toDoubleOption pipe println
 
-  "\n----- String#toDoubleOption" tap println
-  val b1    = "true".toBoolean tap println
-  val bOpt1 = "true".toBooleanOption tap println
-  val bOpt2 = "false".toBooleanOption tap println
-  val bOpt3 = "no".toBooleanOption tap println
+  "\n----- String#toDoubleOption" pipe println
+  val b1    = "true".toBoolean pipe println
+  val bOpt1 = "true".toBooleanOption pipe println
+  val bOpt2 = "false".toBooleanOption pipe println
+  val bOpt3 = "no".toBooleanOption pipe println
 
   prtLine()
 }

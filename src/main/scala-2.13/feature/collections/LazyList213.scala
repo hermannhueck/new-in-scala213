@@ -20,9 +20,9 @@ object LazyList213 extends App {
         .continually(42)
         .take(10)
         .zipWithIndex
-        .map { case value -> index => index -> value } tap println
+        .map { case value -> index => index -> value } pipe println
 
-    stream.to(List) tap println
+    stream.to(List) pipe println
    */
 
   val ll: LazyList[(Int, Int)] =
@@ -32,7 +32,7 @@ object LazyList213 extends App {
       .zipWithIndex
       .map { case value -> index => index -> value } tap println
 
-  ll.to(List) tap println
+  ll.to(List) pipe println
 
   prtLine()
 }

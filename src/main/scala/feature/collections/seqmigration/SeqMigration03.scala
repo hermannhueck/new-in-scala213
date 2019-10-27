@@ -12,7 +12,7 @@ object SeqMigration03 extends App {
   prtTitleObjectName(this)
 
   prtSubTitle("SeqMigration Strategy 03")
-  "----- view source code -----" tap println
+  "----- view source code -----" pipe println
 
   trait Order
   trait Food

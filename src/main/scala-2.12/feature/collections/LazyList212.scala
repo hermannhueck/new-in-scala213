@@ -19,7 +19,7 @@ object LazyList212 extends App {
       .zipWithIndex
       .map { case (value, index) => index -> value } tap println
 
-  stream.to[List] tap println
+  stream.to[List] pipe println
 
   prtLine()
 }

@@ -27,12 +27,12 @@ object Breakout213 extends App {
   val set: Set[(Int, Int)]         = list.view.map(toPair).to(Set)
   val map: Map[Int, Int]           = list.view.map(toPair).to(Map)
 
-  ">>> target type: List" tap println; println(list2)
-  ">>> target type: Array[Int, Int]" tap println; println(array)
-  ">>> target type: LazyList[Int, Int]" tap println; println(stream)
-  ">>> target type: Seq[Int, Int]" tap println; println(seq)
-  ">>> target type: Set[Int, Int]" tap println; println(set)
-  ">>> target type: Map[Int, Int]" tap println; println(map)
+  ">>> target type: List" pipe println; println(list2)
+  ">>> target type: Array[Int, Int]" pipe println; println(array)
+  ">>> target type: LazyList[Int, Int]" pipe println; println(stream)
+  ">>> target type: Seq[Int, Int]" pipe println; println(seq)
+  ">>> target type: Set[Int, Int]" pipe println; println(set)
+  ">>> target type: Map[Int, Int]" pipe println; println(map)
 
   prtLine()
 }

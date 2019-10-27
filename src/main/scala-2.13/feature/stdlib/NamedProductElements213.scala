@@ -23,10 +23,10 @@ object NamedProductElements213 extends App {
   johndoe.productElementNames foreach println // since 2.13
 
   println
-  johndoe.productElementName(0) tap (name => print(s"$name: ")) // since 2.13
-  johndoe.productElement(0) tap println                         // before 2.13
-  johndoe.productElementName(1) tap (name => print(s"$name: ")) // since 2.13
-  johndoe.productElement(1) tap println                         // before 2.13
+  johndoe.productElementName(0) pipe (name => print(s"$name: ")) // since 2.13
+  johndoe.productElement(0) pipe println                         // before 2.13
+  johndoe.productElementName(1) pipe (name => print(s"$name: ")) // since 2.13
+  johndoe.productElement(1) pipe println                         // before 2.13
 
   println
 
@@ -34,7 +34,7 @@ object NamedProductElements213 extends App {
     s"${p.productElementName(index)}: ${p.productElement(index)}"
 
   (0 until johndoe.productArity).toList foreach { index =>
-    elementNameAndValue(johndoe, index) tap println
+    elementNameAndValue(johndoe, index) pipe println
   }
 
   println
@@ -55,9 +55,9 @@ object NamedProductElements213 extends App {
     @inline def toJsonString: String = productToJson(product)
   }
 
-  johndoe.toJsonString tap println
+  johndoe.toJsonString pipe println
   // { { "name": John Doe }, { "age": 42 }, { "gender": Male }, { "email": john@doe.com } }
-  johndoe.tupled.toJsonString tap println
+  johndoe.tupled.toJsonString pipe println
   //{ { "_1": John Doe }, { "_2": 42 }, { "_3": Male }, { "_4": john@doe.com } }
 
   prtLine()

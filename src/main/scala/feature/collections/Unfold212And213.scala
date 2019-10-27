@@ -11,8 +11,8 @@ object Unfold212and213 extends App {
 
   prtTitleObjectName(this)
 
-  "In 2.13 unfold is a factory method of different collection companion objects" tap println
-  "In 2.12 unfold is provided by my compat213 library" tap println
+  "In 2.13 unfold is a factory method of different collection companion objects" pipe println
+  "In 2.12 unfold is provided by my compat213 library" pipe println
 
   val unfoldFunction: Int => Option[(Int, Int)] = {
     case 0 => None
@@ -21,7 +21,7 @@ object Unfold212and213 extends App {
 
   prtSubTitle("List.unfold")
 
-  List.unfold(10)(unfoldFunction) tap println
+  List.unfold(10)(unfoldFunction) pipe println
 
   prtSubTitle("Iterator.unfold")
 

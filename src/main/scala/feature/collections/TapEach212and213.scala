@@ -10,8 +10,8 @@ object TapEach212and213 extends App {
 
   prtSubTitle("Coll#tapEach 2.12 and 2.13")
 
-  "In 2.13 unfold is a factory method of different collection companion objects" tap println
-  "In 2.12 unfold is provided by my compat213 library\n" tap println
+  "In 2.13 unfold is a factory method of different collection companion objects" pipe println
+  "In 2.12 unfold is provided by my compat213 library\n" pipe println
 
   val doubledAndSquared: List[Int] =
     List(1, 2, 3)

@@ -27,12 +27,12 @@ object Breakout212 extends App {
   val set: Set[(Int, Int)]       = list.map(toPair)(collection.breakOut)
   val map: Map[Int, Int]         = list.map(toPair)(collection.breakOut)
 
-  ">>> default target type: IndexedSeq" tap println; println(indexedSeq)
-  ">>> target type: Array[Int, Int]" tap println; println(array)
-  ">>> target type: Stream[Int, Int]" tap println; println(stream)
-  ">>> target type: Seq[Int, Int]" tap println; println(seq)
-  ">>> target type: Set[Int, Int]" tap println; println(set)
-  ">>> target type: Map[Int, Int]" tap println; println(map)
+  ">>> default target type: IndexedSeq" pipe println; println(indexedSeq)
+  ">>> target type: Array[Int, Int]" pipe println; println(array)
+  ">>> target type: Stream[Int, Int]" pipe println; println(stream)
+  ">>> target type: Seq[Int, Int]" pipe println; println(seq)
+  ">>> target type: Set[Int, Int]" pipe println; println(set)
+  ">>> target type: Map[Int, Int]" pipe println; println(map)
 
   prtLine()
 }

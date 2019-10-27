@@ -463,8 +463,6 @@ These become libraries of their own.
 
 ---
 
-<br/>
-<br/>
 ## Chaining: *pipe* &nbsp;and *tap*
 
 <br/>
@@ -475,10 +473,15 @@ val x: Int = 5 tap println
 
 val y: Int = 5 pipe (_ * x) tap println
 
-List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
+List(1, 2, 3) pipe (ys => println("debug: " + ys.toString))
 
 val times6 = (_: Int) * 6
-(1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
+(1 - 2 - 3)
+  .tap(v => println(s"initial: $v"))
+  .pipe(times6)
+  .tap(v => println(s"after times6: $v"))
+  .pipe(scala.math.abs)
+  .pipe(v => println(s"after scala.math.abs: $v"))
 ```
 
 --
@@ -491,9 +494,11 @@ val times6 = (_: Int) * 6
 
 ---
 
-## How to backport to 2.12: *pipe* &nbsp;and *tap*
+<br/>
+## Backport to 2.12: *pipe* &nbsp;and *tap*
 
-- in 2.12 backport library use same package name as in 2.13 stdlib: *scala.util.chaining*
+<br/>
+- My 2.12 backport library uses the same package name as in 2.13 stdlib: *scala.util.chaining*
 
 ```scala
 package scala.util
@@ -510,20 +515,9 @@ package object chaining {
 
 --
 
-```scala
-import scala.util.chaining._
-
-val x: Int = 5 tap println
-
-val y: Int = 5 pipe (_ * x) tap println
-
-List(1, 2, 3) tap (ys => println("debug: " + ys.toString))
-
-val times6 = (_: Int) * 6
-(1 - 2 - 3) pipe times6 pipe scala.math.abs tap println
-```
-
-The same code runs without friction under 2.12 and 2.13.
+<br/>
+<br/>
+With this backport he same code runs without friction under 2.12 and 2.13.
 
 ---
 
@@ -729,7 +723,7 @@ def tryLines(fileName: String): Try[Seq[String]] =
 
 def catFile(fileName: String): Unit =
   tryLines(fileName) match {
-    case Failure(exception) => exception.toString tap println
+    case Failure(exception) => exception.toString pipe println
     case Success(lines) => lines foreach println
   }
 
@@ -816,9 +810,9 @@ val dateString = "11-June-2019"
 
 val s"$day-$month-$year" = dateString
 
-year tap println
-month tap println
-day tap println
+year pipe println
+month pipe println
+day pipe println
 ```
 
 ---
@@ -846,10 +840,10 @@ val johndoe = Person("John Doe", 42, Male, "john@doe.com")
 ```scala
 johndoe.productElementNames foreach println
 
-johndoe.productElementName(0) tap (name => print(s"$name: "))
-johndoe.productElement(0) tap println
-johndoe.productElementName(1) tap (name => print(s"$name: "))
-johndoe.productElement(1) tap println
+johndoe.productElementName(0) pipe (name => print(s"$name: "))
+johndoe.productElement(0) pipe println
+johndoe.productElementName(1) pipe (name => print(s"$name: "))
+johndoe.productElement(1) pipe println
 ```
 
 ---
@@ -876,9 +870,9 @@ implicit class ProductOps(private val product: Product) {
   def toJsonString: String = productToJson(product)
 }
 
-johndoe.toJsonString tap println
+johndoe.toJsonString pipe println
 // { { "name": John Doe }, { "age": 42 }, { "gender": Male }, { "email": john@doe.com } }
-johndoe.tupled.toJsonString tap println
+johndoe.tupled.toJsonString pipe println
 // { { "_1": John Doe }, { "_2": 42 }, { "_3": Male }, { "_4": john@doe.com } }
 ```
 
@@ -980,9 +974,9 @@ val f1: Future[Int] = Future.apply { squaredAsync(5) }.flatten map plus17
 val f2: Future[Int] = Future.unit.flatMap { _ => squaredAsync(5) } map plus17
 val f3: Future[Int] = Future.delegate { squaredAsync(5) } map plus17
 
-Await.result(f1, 3.seconds) tap println   //=> 42
-Await.result(f2, 3.seconds) tap println   //=> 42
-Await.result(f3, 3.seconds) tap println   //=> 42
+Await.result(f1, 3.seconds) pipe println   //=> 42
+Await.result(f2, 3.seconds) pipe println   //=> 42
+Await.result(f3, 3.seconds) pipe println   //=> 42
 ```
 
 ---
@@ -1634,9 +1628,9 @@ val xs = List.fill(5000)(scala.util.Random.nextInt)
 
 // lenghtIs or sizeIs traverse no more than 101 element
 if (xs.lengthIs > 100) {
-    new IllegalArgumentException("Too many elements!") tap println
+    new IllegalArgumentException("Too many elements!") pipe println
 } else {
-    s"The list has ${xs.length} elements." tap println
+    s"The list has ${xs.length} elements." pipe println
 }
 ```
 
@@ -1684,7 +1678,7 @@ val unfoldFunction: Int => Option[(Int, Int)] = {
   case s => Some(((s * s), (s - 1)))
 }
 
-List.unfold(10)(unfoldFunction) tap println
+List.unfold(10)(unfoldFunction) pipe println
 //=> List(100, 81, 64, 49, 36, 25, 16, 9, 4, 1)
 ```
 

@@ -11,10 +11,10 @@ object SymbolLiterals212and213 extends App {
   prtSubTitle("Symbol Literals allowed in 2.12, deprecated in 2.13")
 
   // val symbol1 = 'symbol1 // literal deprecated in 2.13
-  // symbol1 tap println
+  // symbol1 pipe println
 
   val symbol2 = Symbol("symbol2") // new: create symbol with Symbol.apply
-  symbol2 tap println
+  symbol2 pipe println
 
   prtLine()
 }
