@@ -1,3 +1,5 @@
+import ScalacOptions._
+
 val projectName        = "New in Scala 2.13"
 val projectDescription = "New features in Scala 2.13"
 
@@ -5,8 +7,9 @@ val scala212               = "2.12.10"
 val scala213               = "2.13.1"
 val supportedScalaVersions = List(scala212, scala213)
 
-val scalaTest  = "org.scalatest"  %% "scalatest"  % "3.0.8"  % Test withSources () withJavadoc ()
-val scalaCheck = "org.scalacheck" %% "scalacheck" % "1.14.2" % Test withSources () withJavadoc ()
+val scalaTest             = "org.scalatest"          %% "scalatest"               % "3.0.8"
+val scalaCheck            = "org.scalacheck"         %% "scalacheck"              % "1.14.2"
+val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
 
 inThisBuild(
   Seq(
@@ -14,20 +17,16 @@ inThisBuild(
     crossScalaVersions := supportedScalaVersions,
     version := "0.1.0",
     publish / skip := true,
-    scalacOptions ++= Seq(
-      "-encoding",
-      "UTF-8",            // source files are in UTF-8
-      "-deprecation",     // warn about use of deprecated APIs
-      "-unchecked",       // warn about unchecked type parameters
-      "-feature",         // warn about misused language features
-      "-explaintypes",    // explain type errors in more detail
-      "-Xfatal-warnings", // fail the compilation if there are any warnings
-      "-Xcheckinit"       // wrap field accessors to throw an exception on uninitialized access
-    ),
     libraryDependencies ++= Seq(
-      scalaTest,
-      scalaCheck
-    )
+      scalaTest  % Test,
+      scalaCheck % Test
+    ),
+    initialCommands :=
+      s"""|
+          |import scala.util.chaining._
+          |import util.syntax.pipe._
+          |println
+          |""".stripMargin // initialize REPL
   )
 )
 
@@ -44,31 +43,19 @@ lazy val examples = (project in file("examples"))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "examples",
-    description := "Examples for 2.12 and 2.13",
+    description := "Examples for new features in Scala 2.13",
     bloopGenerate in Test := None,
-    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2",
-    scalacOptions ++= {
-      println(s"\n>>>>>          compiling for Scala ${(scalaVersion).value}\n")
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((2, minor)) if minor >= 13 =>
-          Seq(
-            "-Xlint:-unused,_" // suppress unused warnings in 2.13
-            // "-Xlint"
-          )
-        case _ =>
-          Seq(
-            "-Ypartial-unification", // (removed in scala 2.13) allow the compiler to unify type constructors of different arities
-            "-language:higherKinds", // (not required since scala 2.13.1) suppress warnings when using higher kinded types
-            "-Xlint"                 // enable handy linter warnings
-          )
-      }
-    }
+    libraryDependencies += scalaCollectionCompat,
+    scalacOptions ++= scalacOptionsFor(scalaVersion.value),
+    // suppress unused import warnings in the scala repl
+    console / scalacOptions := scalacOptions.value :+ "-Xlint:-unused,_"
   )
 
 lazy val compat213 = (project in file("compat213"))
   .settings(
     name := "compat213",
-    description := "compat library providing scala 2.13 extensions for scala 2.12"
+    description := "compat library providing features of Scala 2.13 backported to 2.12",
+    scalacOptions ++= scalacOptionsFor(scalaVersion.value)
   )
 
 lazy val util = (project in file("util"))
@@ -77,7 +64,8 @@ lazy val util = (project in file("util"))
     name := "util",
     description := "Utilities",
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "build"
+    buildInfoPackage := "build",
+    scalacOptions ++= scalacOptionsFor(scalaVersion.value)
   )
 
 // https://github.com/typelevel/kind-projector
