@@ -1,7 +1,7 @@
 import Dependencies._
 import ScalacOptions._
 
-val projectName        = "New in Scala 2.13"
+val projectName        = "New-in-Scala213"
 val projectDescription = "New features in Scala 2.13"
 
 val scala212               = "2.12.10"
