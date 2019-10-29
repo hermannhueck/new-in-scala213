@@ -1,3 +1,4 @@
+import Dependencies._
 import ScalacOptions._
 
 val projectName        = "New in Scala 2.13"
@@ -6,10 +7,6 @@ val projectDescription = "New features in Scala 2.13"
 val scala212               = "2.12.10"
 val scala213               = "2.13.1"
 val supportedScalaVersions = List(scala212, scala213)
-
-val scalaTest             = "org.scalatest"          %% "scalatest"               % "3.0.8"
-val scalaCheck            = "org.scalacheck"         %% "scalacheck"              % "1.14.2"
-val scalaCollectionCompat = "org.scala-lang.modules" %% "scala-collection-compat" % "2.1.2"
 
 inThisBuild(
   Seq(
