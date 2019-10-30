@@ -41,11 +41,14 @@ lazy val examples = (project in file("examples"))
   .settings(
     name := "examples",
     description := "Examples for new features in Scala 2.13",
-    bloopGenerate in Test := None,
+    Test / bloopGenerate := None,
     libraryDependencies += scalaCollectionCompat,
     scalacOptions ++= scalacOptionsFor(scalaVersion.value),
     // suppress unused import warnings in the scala repl
-    console / scalacOptions := scalacOptions.value :+ "-Xlint:-unused,_"
+    console / scalacOptions := scalacOptions.value.map {
+      case "-Xlint" => "-Xlint:-unused,_"
+      case other    => other
+    }
   )
 
 lazy val compat213 = (project in file("compat213"))
