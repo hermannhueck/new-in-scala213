@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object Breakout213 extends App {
+object Breakout213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Breakout 2.13")
+  printTextInLine("Breakout 2.13")
 
   // example taken from
   // https://stackoverflow.com/questions/1715681/scala-2-8-breakout
@@ -33,6 +31,4 @@ object Breakout213 extends App {
   ">>> target type: Seq[Int, Int]" pipe println; println(seq)
   ">>> target type: Set[Int, Int]" pipe println; println(set)
   ">>> target type: Map[Int, Int]" pipe println; println(map)
-
-  prtLine()
 }

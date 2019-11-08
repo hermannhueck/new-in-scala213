@@ -6,11 +6,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object Future213 extends App {
+object Future213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Future 2.13")
+  printTextInLine("Future 2.13")
 
   implicit lazy val ec: ExecutionContext = ExecutionContext.global
 
@@ -56,6 +54,4 @@ object Future213 extends App {
   } map plus17
 
   Await.result(f4, 3.seconds) pipe println
-
-  prtLine()
 }

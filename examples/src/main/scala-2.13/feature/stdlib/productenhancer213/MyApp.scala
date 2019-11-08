@@ -27,9 +27,7 @@ case class SIBOSP(
     prod: Product // nested Product allows passing any case class or any tuple
 )
 
-object MyApp extends App {
-
-  prtTitleObjectName(this)
+object MyApp extends util.App {
 
   import ProductEnhancer._
 
@@ -51,7 +49,7 @@ object MyApp extends App {
   val sibospTupled = SIBOSP.unapply(sibosp).get
   showProduct(sibospTupled) pipe println
 
-  prtLine()
+  printLine()
 
   def showProduct(p: Product): String =
     s"""|${p.toJsonString}

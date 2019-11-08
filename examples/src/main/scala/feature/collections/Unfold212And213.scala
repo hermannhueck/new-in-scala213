@@ -7,9 +7,7 @@ import scala.util.Using
 import util.formatting._
 import compat213.collections.unfold._
 
-object Unfold212and213 extends App {
-
-  prtTitleObjectName(this)
+object Unfold212and213 extends util.App {
 
   "In 2.13 unfold is a factory method of different collection companion objects" pipe println
   "In 2.12 unfold is provided by my compat213 library" pipe println
@@ -19,11 +17,11 @@ object Unfold212and213 extends App {
     case s => Some(((s * s), (s - 1)))
   }
 
-  prtSubTitle("List.unfold")
+  printTextInLine("List.unfold")
 
   List.unfold(10)(unfoldFunction) pipe println
 
-  prtSubTitle("Iterator.unfold")
+  printTextInLine("Iterator.unfold")
 
   def bufferedReader(fileName: String): BufferedReader =
     new BufferedReader(new FileReader(fileName))
@@ -49,6 +47,4 @@ object Unfold212and213 extends App {
     Using.resource(bufferedReader("README.md"))(readLines_dissected)
 
   lines foreach println
-
-  prtLine()
 }

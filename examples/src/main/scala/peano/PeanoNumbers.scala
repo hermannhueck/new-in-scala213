@@ -6,7 +6,7 @@ object PeanoNumbers extends App {
 
   import Nat._
 
-  prtTitleObjectName(this)
+  printHeaderWithProgramName(this)
 
   val zero: Zero.type = Zero
   println(zero)
@@ -21,6 +21,4 @@ object PeanoNumbers extends App {
   (0 until 10)
     .map(toNat)
     .foreach(println)
-
-  prtLine()
 }

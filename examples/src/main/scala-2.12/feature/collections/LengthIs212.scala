@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object LengthIs212 extends App {
+object LengthIs212 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Coll#lengthIs 2.12")
+  printTextInLine("Coll#lengthIs 2.12")
 
   val xs = List.fill(5000)(scala.util.Random.nextInt)
 
@@ -17,6 +15,4 @@ object LengthIs212 extends App {
   } else {
     s"The list has ${xs.length} elements." pipe println
   }
-
-  prtLine()
 }

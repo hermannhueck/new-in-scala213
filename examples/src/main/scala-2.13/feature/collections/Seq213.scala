@@ -8,11 +8,9 @@ import scala.collection.mutable.ArrayBuffer
 
 import util.formatting._
 
-object Seq213 extends App {
+object Seq213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Seq 2.13")
+  printTextInLine("Seq 2.13")
 
   // type Seq[+A] = scala.collection.immutable.Seq[A]
   // Seq is immutable
@@ -68,6 +66,4 @@ object Seq213 extends App {
 
   val food8 = orderFood3(ArraySeq(new Order {}): _*)
   val food9 = orderFood3(ArrayBuffer(new Order {}).toSeq: _*)
-
-  prtLine()
 }

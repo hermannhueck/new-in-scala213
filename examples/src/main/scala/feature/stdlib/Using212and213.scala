@@ -10,11 +10,9 @@ import scala.util.chaining._
 import compat213.collections.unfold._
 import util.formatting._
 
-object Using212and213 extends App {
+object Using212and213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Using 2.12 and 2.13")
+  printTextInLine("Using 2.12 and 2.13")
 
   def bufferedReader(fileName: String): BufferedReader =
     new BufferedReader(new FileReader(fileName))
@@ -71,6 +69,4 @@ object Using212and213 extends App {
   `try` foreach {
     _ foreach println
   }
-
-  prtLine()
 }

@@ -51,9 +51,9 @@ object Json {
     case b: Boolean        => JsonBoolean(b)
     case s: String         => JsonString(s)
     case d: Double         => JsonNumber(d)
-    case f: Float          => JsonNumber(f)
-    case i: Int            => JsonNumber(i)
-    case l: Long           => JsonNumber(l)
+    case f: Float          => JsonNumber(f.toDouble)
+    case i: Int            => JsonNumber(i.toDouble)
+    case l: Long           => JsonNumber(l.toDouble)
     case None              => JsonNull
     case Some(any)         => valueToJson(any)
     case seq: Seq[Any]     => seq map valueToJson pipe JsonArray

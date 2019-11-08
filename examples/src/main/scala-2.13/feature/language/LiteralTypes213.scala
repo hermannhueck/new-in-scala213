@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object LiteralTypes213 extends App {
+object LiteralTypes213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Literal Types 2.13")
+  printTextInLine("Literal Types 2.13")
 
   val wahr: true = true
   wahr pipe println
@@ -25,6 +23,4 @@ object LiteralTypes213 extends App {
 
   val x1: Int = valueOf[42] tap println // is the same as ...
   val x2: Int = new scala.ValueOf(42).value tap println
-
-  prtLine()
 }

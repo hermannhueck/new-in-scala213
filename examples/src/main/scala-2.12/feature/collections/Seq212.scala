@@ -8,11 +8,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object Seq212 extends App {
+object Seq212 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Seq 2.12")
+  printTextInLine("Seq 2.12")
 
   // type Seq[+A] = scala.collection.Seq[A]
   // Seq is not immutable
@@ -48,6 +46,4 @@ object Seq212 extends App {
 
   val food5 = orderFood3(ArraySeq.unsafeWrapArray(Array(new Order {})): _*)
   val food6 = orderFood3(Array(new Order                          {}).toSeq: _*)
-
-  prtLine()
 }

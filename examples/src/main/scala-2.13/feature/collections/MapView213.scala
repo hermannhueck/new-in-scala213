@@ -6,11 +6,9 @@ import scala.collection.MapView
 
 import util.formatting._
 
-object MapView213 extends App {
+object MapView213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("MapView 2.13")
+  printTextInLine("MapView 2.13")
 
   val kvs = Map("one" -> 1, "two" -> 2, "three" -> 3) tap println
 
@@ -28,6 +26,4 @@ object MapView213 extends App {
   // Map#filterKeys returns MapView instead of Map and is deprecated in 2.13
   val mapView2: MapView[Int, String] = kvsFlipped.view.filterKeys(_ % 2 != 0) tap println
   val keysFiltered: Map[Int, String] = mapView2.toMap tap println
-
-  prtLine()
 }

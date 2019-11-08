@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object UnderscoresInNumberLiterals213 extends App {
+object UnderscoresInNumberLiterals213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Underscores in Number Literals 2.13")
+  printTextInLine("Underscores in Number Literals 2.13")
 
   val int0: Int = 1000000 tap println
   val int1: Int = 1_000_000 tap println
@@ -18,6 +16,4 @@ object UnderscoresInNumberLiterals213 extends App {
   val long: Long     = 1_000_000_000L tap println
   val float: Float   = 1_000.99f tap println
   val double: Double = 1_000_000.999_999 tap println
-
-  prtLine()
 }

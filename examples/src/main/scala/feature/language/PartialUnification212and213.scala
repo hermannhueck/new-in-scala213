@@ -31,11 +31,9 @@ import util.formatting._
 
  */
 
-object PartialUnification212and213 extends App {
+object PartialUnification212and213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Partial Unification 2.13")
+  printTextInLine("Partial Unification 2.13")
 
   """----- Scala 2.13: partial-unification is already enabled ---""" pipe println
   """----- Scala 2.12: scalacOptions += "-Ypartial-unification" ---\n""" pipe println
@@ -54,7 +52,7 @@ object PartialUnification212and213 extends App {
   val intToInt: Function1[Int, Int] = x => x * 2
   foo(intToInt)
 
-  prtLine()
+  printLine()
 
   def printFileContent(file: String, fromIncl: Int, toIncl: Int): Unit =
     lines(file)

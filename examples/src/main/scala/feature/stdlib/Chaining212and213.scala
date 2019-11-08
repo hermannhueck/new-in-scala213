@@ -2,11 +2,9 @@ package feature.stdlib
 
 import util.formatting._
 
-object Chaining212and213 extends App {
+object Chaining212and213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Chaining 2.12 + 2.13")
+  printTextInLine("Chaining 2.12 + 2.13")
 
   println(s"${dash(10)} without chaining ${dash(10)}")
 
@@ -50,6 +48,4 @@ object Chaining212and213 extends App {
     val doAll = times6 andThen scala.math.abs
     doAll(1 - 2 - 3) pipe println
   }
-
-  prtLine()
 }

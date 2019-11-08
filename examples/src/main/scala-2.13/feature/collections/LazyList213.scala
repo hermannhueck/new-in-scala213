@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object LazyList213 extends App {
+object LazyList213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Stream/LazyList 2.13")
+  printTextInLine("Stream/LazyList 2.13")
 
   // Stream is lazy in it's tail, but eager in it's head
   // LazyList is lazy in it's head and tail
@@ -33,6 +31,4 @@ object LazyList213 extends App {
       .map { case value -> index => index -> value } tap println
 
   ll.to(List) pipe println
-
-  prtLine()
 }

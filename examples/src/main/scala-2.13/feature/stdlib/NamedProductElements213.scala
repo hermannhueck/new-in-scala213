@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object NamedProductElements213 extends App {
+object NamedProductElements213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Named Product Elements 2.13")
+  printTextInLine("Named Product Elements 2.13")
 
   sealed trait Gender extends Product with Serializable
   case object Male    extends Gender
@@ -59,6 +57,4 @@ object NamedProductElements213 extends App {
   // { { "name": John Doe }, { "age": 42 }, { "gender": Male }, { "email": john@doe.com } }
   johndoe.tupled.toJsonString pipe println
   //{ { "_1": John Doe }, { "_2": 42 }, { "_3": Male }, { "_4": john@doe.com } }
-
-  prtLine()
 }

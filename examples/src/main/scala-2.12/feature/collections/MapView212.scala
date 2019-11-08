@@ -4,11 +4,9 @@ import scala.util.chaining._
 
 import util.formatting._
 
-object MapView212 extends App {
+object MapView212 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("MapView 2.12")
+  printTextInLine("MapView 2.12")
 
   val kvs: Map[String, Int] = Map("one" -> 1, "two" -> 2, "three" -> 3) tap println
 
@@ -24,6 +22,4 @@ object MapView212 extends App {
   // def filterKeys(p: (K) ⇒ Boolean): Map[K, V]
   // Map#filterKeys returns Map in 2.12
   val keysFiltered: Map[Int, String] = kvsFlipped.filterKeys(_ % 2 != 0) tap println
-
-  prtLine()
 }

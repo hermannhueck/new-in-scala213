@@ -6,11 +6,9 @@ package feature.language
  */
 import util.formatting._
 
-object ByNameImplicits213 extends App {
+object ByNameImplicits213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("By Name Implicit Parameters 2.13")
+  printTextInLine("By Name Implicit Parameters 2.13")
 
   trait Foo {
     def next: Foo
@@ -26,6 +24,4 @@ object ByNameImplicits213 extends App {
 
   val foo = implicitly[Foo]
   assert(foo eq foo.next)
-
-  prtLine()
 }

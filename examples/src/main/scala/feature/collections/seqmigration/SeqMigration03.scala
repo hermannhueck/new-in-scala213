@@ -7,11 +7,9 @@ import scala.collection.mutable.ArrayBuffer
 import scala.util.chaining._
 import util.formatting._
 
-object SeqMigration03 extends App {
+object SeqMigration03 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("SeqMigration Strategy 03")
+  printTextInLine("SeqMigration Strategy 03")
   "----- view source code -----" pipe println
 
   trait Order
@@ -31,6 +29,4 @@ object SeqMigration03 extends App {
   val food4 = orderFood(orderArray.toIndexedSeq)
 
   val food5 = orderFood(ArraySeq.unsafeWrapArray(Array(new Order {})))
-
-  prtLine()
 }

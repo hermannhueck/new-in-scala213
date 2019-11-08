@@ -5,11 +5,9 @@ import compat213.either._
 
 import util.formatting._
 
-object EitherFlatten212and213 extends App {
+object EitherFlatten212and213 extends util.App {
 
-  prtTitleObjectName(this)
-
-  prtSubTitle("Either#flatten 2.12 and 2.13")
+  printTextInLine("Either#flatten 2.12 and 2.13")
 
   "Either#flatten is available in 2.13, not in 2.12, but provided by compat213.either" pipe println
   println
@@ -34,6 +32,4 @@ object EitherFlatten212and213 extends App {
   ll.flatten pipe (x => println(s"ll flattened: $x"))
   ll.swap.flatten pipe (x => println(s"ll swapped & flattened: $x"))
   println
-
-  prtLine()
 }
