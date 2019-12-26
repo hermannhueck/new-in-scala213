@@ -35,6 +35,21 @@ lazy val root = (project in file("."))
     crossScalaVersions := Seq.empty
   )
 
+val slidesIn  = "slides-in"
+val slidesOut = "slides-out"
+
+lazy val slides = project // new documentation project
+  .in(file(slidesIn)) // important: it must not be docs/
+  .settings(
+    mdocIn := file(slidesIn),
+    mdocOut := file(slidesOut),
+    mdocVariables := Map(
+      "VERSION" -> version.value
+    )
+  )
+  .dependsOn(examples)
+  .enablePlugins(MdocPlugin)
+
 lazy val examples = (project in file("examples"))
   .dependsOn(compat213, util)
   .enablePlugins(BuildInfoPlugin)
